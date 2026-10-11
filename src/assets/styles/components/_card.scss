@@ -1,0 +1,29 @@
+@use "../tools" as *;
+
+.card {
+  height: 100%;
+  padding: rem(24px);
+  border: 1px solid currentcolor;
+
+  &__title {
+    margin: 0 0 rem(8px);
+  }
+
+  &__meta {
+    margin: 0 0 rem(8px);
+    font-size: rem(14px);
+  }
+
+  &__text {
+    margin: 0;
+  }
+
+  &__link {
+    display: inline-block;
+    margin-top: rem(12px);
+  }
+
+  @include mq("md") {
+    padding: rem(32px);
+  }
+}

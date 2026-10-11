@@ -1,34 +1,157 @@
 <!doctype html>
 
-<html>
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="./assets/styles/main.scss" />
     <!-- do not remove this line! -->
-    <title>UOC Boilerplate</title>
+    <meta
+      name="description"
+      content="Recomendación de lectura de El Hobbit, de J. R. R. Tolkien: sinopsis, personajes, el viaje y fandom."
+    />
+    <title>El Hobbit · Recomendación de lectura</title>
   </head>
+
   <body>
-    <div class="uoc-container">
-      <picture>
-        <source
-          srcset="./assets/images/logo.png?as=webp&width=350"
-          type="image/webp"
-        />
-        <img
-          src="./assets/images/logo.png?width=350"
-          alt="Universitat Oberta de Catalunya"
-          class="uoc-logo"
-        />
-      </picture>
-      <h1 class="uoc-title">Hello, UOC!</h1>
-      <p>
-        This is a starter template for the Advanced HTML and CSS Tools courses
-        from the Master's Program in Multimedia Applications and the Master's
-        Program in Web App and Website Development at the Universitat Oberta de
-        Catalunya.
-      </p>
-    </div>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <include src="./views/header.html"></include>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__content">
+          <p class="hero__eyebrow">Recomendación de lectura</p>
+          <h1 class="hero__title" id="hero-title">El Hobbit</h1>
+          <p class="hero__subtitle">J. R. R. Tolkien · 1937</p>
+          <a class="button button--primary" href="#sinopsis"
+            >Descubre por qué leerlo</a
+          >
+        </div>
+      </section>
+
+      <section class="section" id="sinopsis" aria-labelledby="sinopsis-title">
+        <h2 class="section__title" id="sinopsis-title">Sinopsis</h2>
+        <p class="section__text">texto</p>
+      </section>
+
+      <section
+        class="section section--alt"
+        id="personajes"
+        aria-labelledby="personajes-title"
+      >
+        <h2 class="section__title" id="personajes-title">Personajes</h2>
+        <ul class="card-grid">
+          <li class="card-grid__item">
+            <article class="card">
+              <!-- <img
+                class="card__image"
+                src="./assets/images/bilbo.webp"
+                alt="texto"
+                width="400"
+                height="300"
+                loading="lazy"
+              /> -->
+              <h3 class="card__title">Bilbo Bolsón</h3>
+              <p class="card__text">texto</p>
+            </article>
+          </li>
+          <!-- Repetir por personaje -->
+        </ul>
+      </section>
+
+      <section class="section" id="viaje" aria-labelledby="viaje-title">
+        <h2 class="section__title" id="viaje-title">El viaje</h2>
+        <ol class="timeline">
+          <li class="timeline__item">
+            <h3 class="timeline__title">Bolsón Cerrado</h3>
+            <p class="timeline__text">texto</p>
+          </li>
+        </ol>
+      </section>
+
+      <section
+        class="section section--alt"
+        id="autor"
+        aria-labelledby="autor-title"
+      >
+        <h2 class="section__title" id="autor-title">El autor</h2>
+        <div class="media">
+          <figure class="media__figure">
+            <!-- <img class="media__image" src="texto" alt="texto" /> -->
+            <figcaption class="media__caption">Fuente y licencia</figcaption>
+          </figure>
+          <div class="media__body">texto</div>
+        </div>
+      </section>
+
+      <section
+        class="section"
+        id="por-que-leerlo"
+        aria-labelledby="razones-title"
+      >
+        <h2 class="section__title" id="razones-title">Por qué leerlo</h2>
+        <ul class="feature-list">
+          <li class="feature-list__item">
+            <i class="feature-list__icon fas fa-map" aria-hidden="true"></i>
+            <p class="feature-list__text">texto</p>
+          </li>
+        </ul>
+      </section>
+
+      <section
+        class="section section--alt"
+        id="ficha"
+        aria-labelledby="ficha-title"
+      >
+        <h2 class="section__title" id="ficha-title">Ficha del libro</h2>
+        <dl class="book-facts">
+          <dt class="book-facts__term">Título original</dt>
+          <dd class="book-facts__value">The Hobbit, or There and Back Again</dd>
+          <!-- Año, editorial de tu edición, páginas, ISBNtexto -->
+        </dl>
+      </section>
+
+      <section class="section" id="fandom" aria-labelledby="fandom-title">
+        <h2 class="section__title" id="fandom-title">Fandom</h2>
+
+        <h3 class="section__subtitle">Clubes y comunidades</h3>
+        <ul class="card-grid">
+          <li class="card-grid__item">
+            <article class="card">
+              <h4 class="card__title">Nombre del club</h4>
+              <p class="card__text">texto</p>
+              <a class="card__link" href="https://ejemplo.org">Visitar web</a>
+            </article>
+          </li>
+        </ul>
+
+        <h3 class="section__subtitle">Eventos</h3>
+        <ul class="card-grid">
+          <li class="card-grid__item">
+            <article class="card">
+              <h4 class="card__title">Nombre del evento</h4>
+              <p class="card__meta">
+                <time datetime="2026-09-22">22 de septiembre</time> · Lugar
+              </p>
+              <p class="card__text">texto</p>
+            </article>
+          </li>
+        </ul>
+
+        <h3 class="section__subtitle">Curiosidades</h3>
+        <ul class="feature-list">
+          <li class="feature-list__item">
+            <i
+              class="feature-list__icon fas fa-lightbulb"
+              aria-hidden="true"
+            ></i>
+            <p class="feature-list__text">texto</p>
+          </li>
+        </ul>
+      </section>
+    </main>
+
     <include src="./views/footer.html"></include>
     <script type="module" src="./assets/scripts/main.js"></script>
     <!-- do not remove this line! -->

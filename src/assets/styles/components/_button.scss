@@ -1,0 +1,12 @@
+@use "../tools" as *;
+
+.button {
+  display: inline-block;
+  padding: rem(12px) rem(24px);
+  text-decoration: none;
+
+  &--primary {
+    font-weight: 700;
+    border: 2px solid currentcolor;
+  }
+}

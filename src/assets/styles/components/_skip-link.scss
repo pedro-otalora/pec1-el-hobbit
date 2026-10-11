@@ -1,0 +1,16 @@
+@use "../tools" as *;
+
+// Oculto fuera de pantalla hasta recibir el foco con el teclado
+.skip-link {
+  position: absolute;
+  top: rem(-64px);
+  left: rem(16px);
+  z-index: 100;
+  padding: rem(8px) rem(16px);
+  background-color: #fff;
+  color: #000;
+
+  &:focus {
+    top: rem(16px);
+  }
+}

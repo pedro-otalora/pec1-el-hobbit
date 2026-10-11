@@ -1,0 +1,20 @@
+@use "../tools" as *;
+
+.media {
+  display: grid;
+  gap: rem(24px);
+
+  &__figure {
+    margin: 0;
+  }
+
+  &__caption {
+    margin-top: rem(8px);
+    font-size: rem(14px);
+  }
+
+  @include mq("md") {
+    grid-template-columns: 1fr 2fr;
+    align-items: start;
+  }
+}

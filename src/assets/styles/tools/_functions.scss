@@ -1,0 +1,6 @@
+@use "sass:math";
+
+// Convierte px a rem para respetar el tamaño de fuente del usuario
+@function rem($px, $base: 16px) {
+  @return math.div($px, $base) * 1rem;
+}

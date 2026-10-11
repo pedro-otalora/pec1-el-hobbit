@@ -1,0 +1,19 @@
+@use "../tools" as *;
+
+.book-facts {
+  display: grid;
+  gap: rem(8px);
+
+  &__term {
+    font-weight: 700;
+  }
+
+  &__value {
+    margin: 0 0 rem(8px);
+  }
+
+  @include mq("md") {
+    grid-template-columns: max-content 1fr;
+    column-gap: rem(24px);
+  }
+}

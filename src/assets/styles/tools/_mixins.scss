@@ -1,0 +1,13 @@
+@use "sass:map";
+@use "../variables" as *;
+
+// Mobile first: estilos base para móvil, ampliados con min-width
+@mixin mq($bp) {
+  @if not map.has-key($breakpoints, $bp) {
+    @error "Breakpoint `#{$bp}` no existe en $breakpoints.";
+  }
+
+  @media (min-width: map.get($breakpoints, $bp)) {
+    @content;
+  }
+}

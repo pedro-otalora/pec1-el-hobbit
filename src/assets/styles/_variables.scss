@@ -10,3 +10,9 @@ $uoc-masterbrand: #73edff;
 $uoc-bg: color.scale($uoc-masterbrand, $lightness: 70%);
 
 $mqMinWidth: 420px;
+
+// Breakpoints mobile first (se usan con el mixin mq)
+$breakpoints: (
+  "md": 768px,
+  "lg": 1024px,
+);
