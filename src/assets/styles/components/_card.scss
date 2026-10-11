@@ -3,7 +3,9 @@
 .card {
   height: 100%;
   padding: rem(24px);
-  border: 1px solid currentcolor;
+  background-color: $color-surface;
+  border: 1px solid $color-bg-alt;
+  border-top: 4px solid $color-accent;
 
   &__title {
     margin: 0 0 rem(8px);

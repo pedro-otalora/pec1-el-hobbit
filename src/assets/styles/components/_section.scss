@@ -1,7 +1,12 @@
 @use "../tools" as *;
 
 .section {
-  padding: rem(48px) rem(16px);
+  // Centra el contenido sin necesidad de un contenedor extra en el HTML
+  padding: rem(48px) max(rem(16px), calc((100% - #{$container-max-width}) / 2));
+
+  &--alt {
+    background-color: $color-bg-alt;
+  }
 
   &__title {
     margin: 0 0 rem(24px);
@@ -16,6 +21,6 @@
   }
 
   @include mq("md") {
-    padding: rem(80px) rem(32px);
+    padding-block: rem(80px);
   }
 }

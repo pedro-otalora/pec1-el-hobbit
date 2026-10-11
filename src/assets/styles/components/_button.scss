@@ -5,8 +5,13 @@
   padding: rem(12px) rem(24px);
   text-decoration: none;
 
-  &--primary {
+    &--primary {
     font-weight: 700;
-    border: 2px solid currentcolor;
+    color: $color-white;
+    background-color: $color-shire;
+
+    &:hover {
+      background-color: $color-ink;
+    }
   }
 }
