@@ -7,8 +7,8 @@
   left: rem(16px);
   z-index: 100;
   padding: rem(8px) rem(16px);
-  background-color: $color-text;
   color: $color-bg;
+  background-color: $color-text;
 
   &:focus {
     top: rem(16px);

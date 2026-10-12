@@ -17,8 +17,8 @@
 
   @include mq("md") {
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: rem(16px) rem(32px);
   }
 }
