@@ -5,7 +5,7 @@
 
 // El orden de @use determina el orden del CSS final (ITCSS: de genérico a específico)
 @use "dependencies";
-@use "base";
+@use "elements";
 @use "layouts/home";
 @use "components";
 @use "utilities";
