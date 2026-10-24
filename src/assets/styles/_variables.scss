@@ -7,6 +7,7 @@ $font-family-heading: "Cinzel", "Georgia", serif;
 $font-family-body: "Lora", "Georgia", serif;
 $line-height-base: 1.6;
 $line-height-heading: 1.2;
+$letter-spacing-heading: 0.06em; // espaciado de rótulo de mapa para Cinzel
 
 // ==========================================================
 // Paleta (valores base)
@@ -28,6 +29,12 @@ $color-text: $color-ink;
 $color-link: $color-shire;
 $color-accent: $color-gold;     // solo decoración: no llega al contraste mínimo para texto
 $color-focus: $color-dragon;
+
+// Franja oscura (la Montaña Solitaria)
+$color-bg-dark: $color-ink;
+$color-text-on-dark: $color-parchment;
+$color-accent-on-dark: $color-gold;  // 4,84:1 sobre tinta: válido también para texto
+$color-focus-on-dark: $color-gold;   // el rojo dragón solo da 1,88:1 sobre tinta
 
 // ==========================================================
 // Layout

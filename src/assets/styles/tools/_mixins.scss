@@ -1,5 +1,7 @@
+@use "sass:list";
 @use "sass:map";
 @use "../variables" as *;
+@use "functions" as *;
 
 // Mobile first: estilos base para móvil, ampliados con min-width
 @mixin mq($bp) {
@@ -9,5 +11,33 @@
 
   @media (min-width: map.get($breakpoints, $bp)) {
     @content;
+  }
+}
+
+// Separador decorativo de mapa (línea ◆ línea) bajo el elemento que lo incluye.
+// Es un pseudo-elemento: no añade marcado ni lo anuncian los lectores de pantalla.
+@mixin ornament($color: $color-accent, $width: 160px, $align: "start") {
+  @if not list.index(("start", "center"), $align) {
+    @error "Alineación `#{$align}` no válida en ornament(): usa \"start\" o \"center\".";
+  }
+
+  &::after {
+    display: block;
+    width: rem($width);
+    max-width: 100%;
+    height: rem(12px);
+    margin-block-start: rem(12px);
+    content: "";
+    background-color: $color;
+    
+    // Recorta el rectángulo en forma de línea con un rombo en el centro
+    clip-path: polygon(
+      0% 40%, 46% 40%, 50% 0%, 54% 40%, 100% 40%,
+      100% 60%, 54% 60%, 50% 100%, 46% 60%, 0% 60%
+    );
+
+    @if $align == "center" {
+      margin-inline: auto;
+    }
   }
 }
