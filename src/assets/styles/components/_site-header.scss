@@ -1,24 +1,25 @@
 @use "../tools" as *;
 
-
-
 .site-header {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: rem(12px);
-  padding: rem(16px);
+  align-items: center;
+  justify-content: space-between;
+  padding: rem(12px) rem(16px);
   background-color: $color-bg;
   border-block-end: 3px solid $color-accent;
 
   &__logo {
+    font-family: $font-family-heading;
+    font-size: rem(20px);
     font-weight: 700;
+    color: $color-heading;
+    letter-spacing: $letter-spacing-heading;
     text-decoration: none;
   }
 
-  @include mq("md") {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  @include mq("lg") {
     padding: rem(16px) rem(32px);
   }
 }

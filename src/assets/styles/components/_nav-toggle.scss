@@ -1,0 +1,26 @@
+@use "../tools" as *;
+
+// Botón del menú en móvil: lo muestra el JS y desaparece a partir de lg
+.nav-toggle {
+  display: inline-flex;
+  gap: rem(8px);
+  align-items: center;
+  padding: rem(12px) rem(16px);
+  font-family: $font-family-heading;
+  font-size: rem(14px);
+  color: $color-heading;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid $color-accent;
+
+  // display: inline-flex anularía el atributo hidden, así que se restablece
+  &[hidden] {
+    display: none;
+  }
+
+  @include mq("lg") {
+    display: none;
+  }
+}

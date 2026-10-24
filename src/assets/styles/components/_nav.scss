@@ -1,16 +1,74 @@
 @use "../tools" as *;
 
 .nav {
+  // En móvil ocupa una fila completa bajo el logo y el botón
+  flex-basis: 100%;
+
+  @include mq("lg") {
+    flex-basis: auto;
+  }
+
   &__list {
     display: flex;
-    flex-wrap: wrap;
-    gap: rem(16px);
+    flex-direction: column;
+    gap: rem(4px);
     padding-inline-start: 0;
     margin-block: 0;
     list-style: none;
+
+    @include mq("lg") {
+      flex-flow: row wrap;
+      gap: rem(20px);
+    }
   }
 
   &__link {
+    position: relative;
+    display: inline-block;
+    padding-block: rem(8px);
+    font-family: $font-family-heading;
+    font-size: rem(13px);
+    color: $color-text;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     text-decoration: none;
+
+    // Subrayado dorado que crece desde el centro
+    &::after {
+      position: absolute;
+      inset-block-end: rem(2px);
+      inset-inline: 0;
+      height: 2px;
+      content: "";
+      background-color: $color-accent;
+      scale: 0 1;
+
+      @include motion-safe {
+        transition: scale 0.3s ease;
+      }
+    }
   }
+}
+
+// Estados escritos fuera del bloque: el anidado con & confunde a
+// selector-no-qualifying-type al resolver los selectores BEM
+
+// Con JS activo el menú se pliega en móvil; a partir de lg siempre se ve
+.nav--collapsible:not(.nav--open) {
+  display: none;
+
+  @include mq("lg") {
+    display: block;
+  }
+}
+
+// Al pasar el ratón y en la sección activa (aria-current lo pone el JS)
+.nav__link:hover,
+.nav__link[aria-current="true"] {
+  color: $color-link;
+}
+
+.nav__link:hover::after,
+.nav__link[aria-current="true"]::after {
+  scale: 1 1;
 }

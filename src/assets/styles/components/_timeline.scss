@@ -59,15 +59,15 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
     width: rem($timeline-footprint-width);
     content: "";
     background-color: $color-accent;
+
+    // Descubre la ruta a saltos de un pie entero: round() redondea hacia abajo
+    // el progreso al múltiplo más cercano del alto de un pie
+    clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem($timeline-footprint-step)})));
     mask-image: url("/src/assets/images/footprints.svg");
     mask-repeat: repeat-y;
     mask-position: top;
     mask-size: 100% auto;
     
-    // Descubre la ruta a saltos de un pie entero: round() redondea hacia abajo
-    // el progreso al múltiplo más cercano del alto de un pie
-    clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem($timeline-footprint-step)})));
-
     @include mq("lg") {
       inset-inline-start: calc(50% - #{rem($timeline-footprint-width * 0.5)});
     }
@@ -132,7 +132,6 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
     height: 100%;
     object-fit: cover;
     opacity: $timeline-image-opacity;
-    // mask-image: linear-gradient(transparent, $color-mask 25%, $color-mask 75%, transparent);
 
     // Con soporte, la opacidad sigue al scroll: máxima con la franja en el centro
     @include scroll-driven {
