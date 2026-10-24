@@ -42,10 +42,17 @@
   }
 }
 
-// Animaciones ligadas al scroll: solo se aplican si el navegador las soporta
-// y el usuario no ha pedido reducir el movimiento (mejora progresiva)
-@mixin scroll-driven {
+// Las animaciones solo se aplican si el usuario no ha pedido reducir el movimiento
+@mixin motion-safe {
   @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+// Animaciones ligadas al scroll: además requieren soporte del navegador
+// (mejora progresiva)
+@mixin scroll-driven {
+  @include motion-safe {
     @supports (animation-timeline: view()) {
       @content;
     }

@@ -1,29 +1,114 @@
 @use "../tools" as *;
 
+// Tamaño máximo de la silueta de fondo
+$hero-art-size: 560px;
+
 .hero {
+  display: grid;
+  place-items: center;
+  min-height: 85svh;
   padding: rem(64px) rem(16px);
+  overflow: clip;
   text-align: center;
+  background-image: radial-gradient(ellipse at center, $color-hero-glow, transparent 70%);
+
+  // La silueta y el contenido ocupan la misma celda de la rejilla:
+  // quedan superpuestos y centrados sin posicionamiento absoluto
+  &__art,
+  &__content {
+    grid-area: 1 / 1;
+  }
+
+  &__art {
+    width: min(90vw, #{rem($hero-art-size)});
+    height: auto;
+    opacity: 0.35;
+  }
+
+  // Misma técnica de trazo que las siluetas del viaje, pero animada por tiempo
+  &__art-path {
+    fill: $color-art-fill;
+    stroke: $color-accent;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+
+    @include motion-safe {
+      animation-name: hero-draw;
+      animation-duration: 3s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: both;
+    }
+  }
+
+  // El texto entra cuando la silueta ya ha empezado a dibujarse
+  &__content {
+    @include motion-safe {
+      animation-name: hero-rise;
+      animation-duration: 1s;
+      animation-timing-function: ease-out;
+      animation-delay: 0.4s;
+      animation-fill-mode: both;
+    }
+  }
 
   &__eyebrow {
     margin-block: 0;
+    font-size: rem(14px);
+    color: $color-heading;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.2em;
   }
 
+  // Tipografía fluida: crece con el ancho de pantalla entre 48 y 96 px
   &__title {
-    margin-block: rem(8px);
-    font-size: rem(40px);
+    margin-block: rem(8px) rem(16px);
+    font-size: clamp(#{rem(48px)}, 12vw, #{rem(96px)});
+
+    @include ornament($width: 240px, $align: "center");
+  }
+
+  &__original {
+    margin-block: 0 rem(8px);
+    font-style: italic;
   }
 
   &__subtitle {
-    margin-block: 0 rem(24px);
+    margin-block: 0 rem(32px);
   }
 
   @include mq("md") {
     padding: rem(120px) rem(32px);
+  }
+}
 
-    &__title {
-      font-size: rem(64px);
-    }
+// La silueta se dibuja y después se rellena
+@keyframes hero-draw {
+  0% {
+    fill-opacity: 0;
+    stroke-dashoffset: 1;
+  }
+
+  70% {
+    fill-opacity: 0;
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    fill-opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+// El contenido aparece subiendo ligeramente
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    translate: 0 rem(16px);
+  }
+
+  to {
+    opacity: 1;
+    translate: none;
   }
 }
