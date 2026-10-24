@@ -8,9 +8,10 @@
     font-weight: 700;
   }
 
-  &__value {
-    margin: 0 0 rem(8px);
-  }
+&__value {
+  margin-block-end: rem(8px);
+  margin-inline-start: 0; // anula la sangría por defecto del <dd>
+}
 
   @include mq("md") {
     grid-template-columns: max-content 1fr;

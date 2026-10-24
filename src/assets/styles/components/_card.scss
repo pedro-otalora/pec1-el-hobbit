@@ -8,21 +8,21 @@
   border-top: 4px solid $color-accent;
 
   &__title {
-    margin: 0 0 rem(8px);
+    margin-block: 0 rem(8px);
   }
 
   &__meta {
-    margin: 0 0 rem(8px);
+    margin-block: 0 rem(8px);
     font-size: rem(14px);
   }
 
   &__text {
-    margin: 0;
+    margin-block: 0;
   }
 
   &__link {
     display: inline-block;
-    margin-top: rem(12px);
+    margin-block-start: rem(12px);
   }
 
   @include mq("md") {

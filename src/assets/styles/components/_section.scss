@@ -9,15 +9,15 @@
   }
 
   &__title {
-    margin: 0 0 rem(24px);
+    margin-block: 0 rem(24px); 
   }
 
   &__subtitle {
-    margin: rem(32px) 0 rem(16px);
+    margin-block: rem(32px) rem(16px);
   }
 
   &__text {
-    margin: 0;
+    margin-block: 0;
   }
 
   @include mq("md") {

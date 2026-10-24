@@ -1,21 +1,22 @@
 @use "../tools" as *;
 
 .timeline {
-  padding: 0;
-  margin: 0;
+  padding-inline-start: 0;
+  margin-block: 0;
   list-style: none;
 
   &__item {
     position: relative;
-    padding: 0 0 rem(24px) rem(24px);
-    border-left: 2px solid currentcolor;
+    padding-block-end: rem(24px);
+    padding-inline-start: rem(24px);
+    border-inline-start: 2px solid currentcolor;
   }
 
   &__title {
-    margin: 0 0 rem(4px);
+    margin-block: 0 rem(4px);
   }
 
   &__text {
-    margin: 0;
+    margin-block: 0;
   }
 }
