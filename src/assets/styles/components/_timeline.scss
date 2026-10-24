@@ -1,18 +1,36 @@
 @use "sass:math";
 @use "../tools" as *;
 
-// Medidas del viaje: la ruta pasa por el centro de los medallones
+// Medidas del viaje
 $timeline-marker-size: 48px;
 $timeline-marker-gap: 24px;
-$timeline-route-width: 2px;
 $timeline-band-padding: 48px;
+$timeline-card-max-width: 560px;
+$timeline-image-opacity: 0.8;
+
+// Pisadas: ancho de la columna y proporciones del viewBox de footprints.svg.
+// Si cambias el viewBox del SVG, actualiza aquí sus dos medidas
+$timeline-footprint-width: 42px;
+$footprint-tile-width: 52;
+$footprint-tile-height: 100;
+
+// Alto de un pie en pantalla (media baldosa): es el salto de la animación
+$timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-height, $footprint-tile-width * 2);
+
+// Progreso de la ruta como propiedad registrada: al tener tipo (<percentage>)
+// el navegador puede animarla. El valor inicial del 100 % deja la ruta completa
+// cuando no hay animación (sin soporte o con reduced-motion)
+@property --timeline-route-progress {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
 
 .timeline {
   position: relative;
   padding-inline-start: 0;
   margin-block: 0;
   list-style: none;
-  counter-reset: stage;
 
   // Línea de tiempo de scroll con nombre: mide el avance por la lista.
   // El margen inferior del 40 % deja la punta de la ruta al 60 % de la pantalla
@@ -22,19 +40,27 @@ $timeline-band-padding: 48px;
     view-timeline-inset: 0% 40%;
   }
 
-  // Ruta discontinua del mapa
+    // Ruta de pisadas de hobbit: el SVG hace de máscara y el color lo pone
+  // background-color, así se pueden recolorear cambiando solo la variable
   &::before {
     position: absolute;
     inset-block: 0;
-    inset-inline-start: rem(math.div($timeline-marker-size - $timeline-route-width, 2));
+    inset-inline-start: rem(math.div($timeline-marker-size - $timeline-footprint-width, 2));
     z-index: 1;
-    width: rem($timeline-route-width);
+    width: rem($timeline-footprint-width);
     content: "";
-    background-image: linear-gradient($color-accent 50%, transparent 0);
-    background-size: 100% rem(12px);
+    background-color: $color-accent;
+    mask-image: url("/src/assets/images/footprints.svg");
+    mask-repeat: repeat-y;
+    mask-position: top;
+    mask-size: 100% auto;
+    
+    // Descubre la ruta a saltos de un pie entero: round() redondea hacia abajo
+    // el progreso al múltiplo más cercano del alto de un pie
+    clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem($timeline-footprint-step)})));
 
     @include mq("lg") {
-      inset-inline-start: calc(50% - #{rem(math.div($timeline-route-width, 2))});
+      inset-inline-start: calc(50% - #{rem($timeline-footprint-width * 0.5)});
     }
 
     @include scroll-driven {
@@ -49,7 +75,7 @@ $timeline-band-padding: 48px;
   // Medallón con el icono de la parada, centrado sobre la ruta
   &__icon {
     position: absolute;
-    inset-block-start: 0;
+    inset-block-start: rem($timeline-band-padding);
     inset-inline-start: 0;
     z-index: 2;
     display: grid;
@@ -57,104 +83,141 @@ $timeline-band-padding: 48px;
     width: rem($timeline-marker-size);
     height: rem($timeline-marker-size);
     font-size: rem(20px);
-    color: $color-text;
-    background-color: $color-surface;
-    border: 2px solid $color-accent;
+    color: $color-accent-on-band;
+    background-color: $color-band;
+    border: 2px solid $color-accent-on-band;
     border-radius: 50%;
 
     @include mq("lg") {
-      inset-inline: auto rem($timeline-marker-size * -0.5);
+      inset-inline-start: calc(50% - #{rem($timeline-marker-size * 0.5)});
     }
 
     @include reveal-on-scroll(timeline-reveal);
   }
 
+  // Cartela con el nombre de la parada
   &__title {
-    margin-block: 0 rem(8px);
-
-    // Numeración romana decorativa: el <ol> ya anuncia el número,
-    // por eso el texto alternativo del contenido generado es ""
-    &::before {
-      display: block;
-      margin-block-end: rem(4px);
-      font-size: rem(14px);
-      letter-spacing: 0.2em;
-      content: counter(stage, upper-roman) / "";
-    }
+    padding: rem(8px) rem(16px);
+    margin-block: 0;
+    color: $color-accent-on-band;
+    background-color: $color-card-on-band;
+    border: 1px solid $color-accent-on-band;
 
     @include reveal-on-scroll(timeline-reveal);
+  }
+
+  // Fondo de la franja: ocupa toda la parada y sale del contenedor
+  // hasta los bordes de la ventana; el color lo decide cada parada
+  &__figure {
+    position: absolute;
+    inset-block: 0;
+    inset-inline: calc(50% - 50vw);
+    z-index: -1;
+    margin: 0;
+    background-color: var(--timeline-band);
+  }
+
+  // La imagen se funde con la franja arriba y abajo gracias a mask-image
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: $timeline-image-opacity;
+    // mask-image: linear-gradient(transparent, $color-mask 25%, $color-mask 75%, transparent);
+
+    // Con soporte, la opacidad sigue al scroll: máxima con la franja en el centro
+    @include scroll-driven {
+      animation-name: timeline-focus;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: cover 0% cover 100%;
+      animation-timeline: --timeline-stop;
+    }
+  }
+
+  &__credit {
+    position: absolute;
+    inset-block-end: rem(8px);
+    inset-inline-end: rem(16px);
+    font-size: rem(12px);
+  }
+
+  // Tarjeta oscura semitransparente con el relato de la parada
+  &__card {
+    display: grid;
+    gap: rem(16px);
+    max-width: rem($timeline-card-max-width);
+    padding: rem(24px);
+    background-color: $color-card-on-band;
+    border: 1px solid $color-accent-on-band;
+
+    @include reveal-on-scroll(timeline-card-fade, cover 0% cover 100%);
   }
 
   &__text {
     margin-block: 0;
-
-    @include reveal-on-scroll(timeline-reveal);
   }
 
+  // Cada parada es una franja: como mínimo un tercio de pantalla,
+  // o la altura de su contenido si es mayor
   &__item {
-    position: relative;
-    padding-block-end: rem(40px);
-    padding-inline-start: rem($timeline-marker-size + $timeline-marker-gap);
-    counter-increment: stage;
+    --timeline-band: #{$color-band};
 
-    &:last-child {
-      padding-block-end: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: rem(16px);
+    align-items: flex-start;
+    min-height: 33vh;
+    padding-block: rem($timeline-band-padding);
+    padding-inline-start: rem($timeline-marker-size + $timeline-marker-gap);
+    color: $color-text-on-band;
+
+    // Franjas alternas. :where() deja la especificidad en la de una sola
+    // clase, para que el modificador --dragon pueda sobrescribir el color
+    &:where(:nth-child(even)) {
+      --timeline-band: #{$color-band-alt};
     }
 
-    // Escritorio: las paradas alternan a cada lado de la ruta
+    // Cada franja mide su avance respecto a la línea central de la pantalla:
+    // el inset del 50 % arriba y abajo reduce la «ventana» a esa línea.
+    // Como las franjas están pegadas, una termina justo cuando empieza la siguiente
+    @include scroll-driven {
+      view-timeline-name: --timeline-stop;
+      view-timeline-axis: block;
+      view-timeline-inset: 50%;
+    }
+
+    // Escritorio: el contenido alterna a cada lado de la ruta central
     @include mq("lg") {
-      width: 50%;
-      padding-inline: 0 rem($timeline-marker-size * 0.5 + $timeline-marker-gap);
-      text-align: end;
+      align-items: flex-end;
+      padding-inline: 0 calc(50% + #{rem($timeline-marker-size * 0.5 + $timeline-marker-gap)});
 
       &:nth-child(even) {
-        padding-inline: rem($timeline-marker-size * 0.5 + $timeline-marker-gap) 0;
-        margin-inline-start: 50%;
-        text-align: start;
+        align-items: flex-start;
+        padding-inline: calc(50% + #{rem($timeline-marker-size * 0.5 + $timeline-marker-gap)}) 0;
       }
     }
   }
 
-  // Franja oscura a todo el ancho (la Montaña Solitaria).
-  // border-image pinta el fondo fuera de la caja sin provocar scroll horizontal
-  &__item--dark {
-    padding-block: rem($timeline-band-padding);
-    margin-block-end: rem(40px);
-    color: $color-text-on-dark;
-    border-image-source: linear-gradient($color-bg-dark, $color-bg-dark);
-    border-image-slice: 0 fill;
-    border-image-outset: 0 100vmax;
+  // La Montaña Solitaria: franja roja
+  &__item--dragon {
+    --timeline-band: #{$color-band-dragon};
   }
 }
 
-// Variantes del medallón según la parada. Van fuera del bloque porque dependen
-// de otro elemento (el <li>) y así el selector compuesto queda explícito
-.timeline__item--dark .timeline__icon {
-  inset-block-start: rem($timeline-band-padding);
-  color: $color-accent-on-dark;
-  background-color: $color-bg-dark;
-  border-color: $color-accent-on-dark;
-}
-
-@include mq("lg") {
-  // En las paradas pares el medallón pasa al otro lado de la ruta
-  .timeline__item:nth-child(even) .timeline__icon {
-    inset-inline: rem($timeline-marker-size * -0.5) auto;
-  }
-}
-
-// Dibuja la ruta de arriba abajo
+// Hace avanzar el progreso de la ruta con el scroll (el recorte lo convierte en pasos)
 @keyframes timeline-draw {
   from {
-    clip-path: inset(0 0 100%);
+    --timeline-route-progress: 0%;
   }
 
   to {
-    clip-path: inset(0);
+    --timeline-route-progress: 100%;
   }
 }
 
-// Las paradas aparecen subiendo ligeramente
+// El medallón y la cartela aparecen subiendo ligeramente
 @keyframes timeline-reveal {
   from {
     opacity: 0;
@@ -164,5 +227,38 @@ $timeline-band-padding: 48px;
   to {
     opacity: 1;
     translate: none;
+  }
+}
+
+// Fundido a negro: 0 cuando el borde de la franja cruza la línea central,
+// umbral máximo con la franja centrada (meseta entre el 40 % y el 60 %)
+@keyframes timeline-focus {
+  0% {
+    opacity: 0;
+  }
+
+  20%,
+  80% {
+    opacity: $timeline-image-opacity;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+// La tarjeta aparece al entrar, se mantiene y se desvanece al salir por arriba
+@keyframes timeline-card-fade {
+  0% {
+    opacity: 0;
+  }
+
+  15%,
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
   }
 }

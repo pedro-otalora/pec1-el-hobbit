@@ -22,3 +22,10 @@ html {
     scroll-margin-top: rem(80px);
   }
 }
+
+// Las franjas del viaje se extienden hasta los bordes de la ventana (100vw).
+// clip recorta el sobrante (el ancho de la barra de scroll) sin crear un
+// contenedor de scroll, que rompería las animaciones ligadas al scroll
+main {
+  overflow-x: clip;
+}

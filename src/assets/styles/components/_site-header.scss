@@ -8,7 +8,7 @@
   gap: rem(12px);
   padding: rem(16px);
   background-color: $color-bg;
-  border-bottom: 1px solid $color-bg-alt;
+  border-block-end: 3px solid $color-accent;
 
   &__logo {
     font-weight: 700;

@@ -18,6 +18,9 @@ $color-shire: #3f5e3a;
 $color-gold: #b8860b;
 $color-dragon: #8b2e1f;
 $color-white: #fff;
+$color-black: #000;
+$color-black-90: #1a1a1a;
+$color-dragon-dark: #4a0d08;
 
 // ==========================================================
 // Colores por función (los componentes solo usan estos)
@@ -29,12 +32,16 @@ $color-text: $color-ink;
 $color-link: $color-shire;
 $color-accent: $color-gold;     // solo decoración: no llega al contraste mínimo para texto
 $color-focus: $color-dragon;
+$color-shadow: color.change($color-ink, $alpha: 0.3);
 
-// Franja oscura (la Montaña Solitaria)
-$color-bg-dark: $color-ink;
-$color-text-on-dark: $color-parchment;
-$color-accent-on-dark: $color-gold;  // 4,84:1 sobre tinta: válido también para texto
-$color-focus-on-dark: $color-gold;   // el rojo dragón solo da 1,88:1 sobre tinta
+// Franjas del viaje (avance de la paleta oscura)
+$color-band: $color-black;
+$color-band-alt: $color-black-90;
+$color-band-dragon: $color-dragon-dark;
+$color-text-on-band: $color-white;
+$color-accent-on-band: $color-gold;   // 4,77:1 o más sobre las tres franjas
+$color-card-on-band: color.change($color-black, $alpha: 0.85);
+$color-mask: $color-black;            // mask-image solo usa su opacidad
 
 // ==========================================================
 // Layout
