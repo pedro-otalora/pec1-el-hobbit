@@ -1,22 +1,168 @@
+@use "sass:math";
 @use "../tools" as *;
 
+// Medidas del viaje: la ruta pasa por el centro de los medallones
+$timeline-marker-size: 48px;
+$timeline-marker-gap: 24px;
+$timeline-route-width: 2px;
+$timeline-band-padding: 48px;
+
 .timeline {
+  position: relative;
   padding-inline-start: 0;
   margin-block: 0;
   list-style: none;
+  counter-reset: stage;
 
-  &__item {
-    position: relative;
-    padding-block-end: rem(24px);
-    padding-inline-start: rem(24px);
-    border-inline-start: 2px solid currentcolor;
+  // Línea de tiempo de scroll con nombre: mide el avance por la lista.
+  // El margen inferior del 40 % deja la punta de la ruta al 60 % de la pantalla
+  @include scroll-driven {
+    view-timeline-name: --timeline-route;
+    view-timeline-axis: block;
+    view-timeline-inset: 0% 40%;
+  }
+
+  // Ruta discontinua del mapa
+  &::before {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: rem(math.div($timeline-marker-size - $timeline-route-width, 2));
+    z-index: 1;
+    width: rem($timeline-route-width);
+    content: "";
+    background-image: linear-gradient($color-accent 50%, transparent 0);
+    background-size: 100% rem(12px);
+
+    @include mq("lg") {
+      inset-inline-start: calc(50% - #{rem(math.div($timeline-route-width, 2))});
+    }
+
+    @include scroll-driven {
+      animation-name: timeline-draw;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: entry 0% exit 0%;
+      animation-timeline: --timeline-route;
+    }
+  }
+
+  // Medallón con el icono de la parada, centrado sobre la ruta
+  &__icon {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: rem($timeline-marker-size);
+    height: rem($timeline-marker-size);
+    font-size: rem(20px);
+    color: $color-text;
+    background-color: $color-surface;
+    border: 2px solid $color-accent;
+    border-radius: 50%;
+
+    @include mq("lg") {
+      inset-inline: auto rem($timeline-marker-size * -0.5);
+    }
+
+    @include reveal-on-scroll(timeline-reveal);
   }
 
   &__title {
-    margin-block: 0 rem(4px);
+    margin-block: 0 rem(8px);
+
+    // Numeración romana decorativa: el <ol> ya anuncia el número,
+    // por eso el texto alternativo del contenido generado es ""
+    &::before {
+      display: block;
+      margin-block-end: rem(4px);
+      font-size: rem(14px);
+      letter-spacing: 0.2em;
+      content: counter(stage, upper-roman) / "";
+    }
+
+    @include reveal-on-scroll(timeline-reveal);
   }
 
   &__text {
     margin-block: 0;
+
+    @include reveal-on-scroll(timeline-reveal);
+  }
+
+  &__item {
+    position: relative;
+    padding-block-end: rem(40px);
+    padding-inline-start: rem($timeline-marker-size + $timeline-marker-gap);
+    counter-increment: stage;
+
+    &:last-child {
+      padding-block-end: 0;
+    }
+
+    // Escritorio: las paradas alternan a cada lado de la ruta
+    @include mq("lg") {
+      width: 50%;
+      padding-inline: 0 rem($timeline-marker-size * 0.5 + $timeline-marker-gap);
+      text-align: end;
+
+      &:nth-child(even) {
+        padding-inline: rem($timeline-marker-size * 0.5 + $timeline-marker-gap) 0;
+        margin-inline-start: 50%;
+        text-align: start;
+      }
+    }
+  }
+
+  // Franja oscura a todo el ancho (la Montaña Solitaria).
+  // border-image pinta el fondo fuera de la caja sin provocar scroll horizontal
+  &__item--dark {
+    padding-block: rem($timeline-band-padding);
+    margin-block-end: rem(40px);
+    color: $color-text-on-dark;
+    border-image-source: linear-gradient($color-bg-dark, $color-bg-dark);
+    border-image-slice: 0 fill;
+    border-image-outset: 0 100vmax;
+  }
+}
+
+// Variantes del medallón según la parada. Van fuera del bloque porque dependen
+// de otro elemento (el <li>) y así el selector compuesto queda explícito
+.timeline__item--dark .timeline__icon {
+  inset-block-start: rem($timeline-band-padding);
+  color: $color-accent-on-dark;
+  background-color: $color-bg-dark;
+  border-color: $color-accent-on-dark;
+}
+
+@include mq("lg") {
+  // En las paradas pares el medallón pasa al otro lado de la ruta
+  .timeline__item:nth-child(even) .timeline__icon {
+    inset-inline: rem($timeline-marker-size * -0.5) auto;
+  }
+}
+
+// Dibuja la ruta de arriba abajo
+@keyframes timeline-draw {
+  from {
+    clip-path: inset(0 0 100%);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
+}
+
+// Las paradas aparecen subiendo ligeramente
+@keyframes timeline-reveal {
+  from {
+    opacity: 0;
+    translate: 0 rem(16px);
+  }
+
+  to {
+    opacity: 1;
+    translate: none;
   }
 }

@@ -41,3 +41,24 @@
     }
   }
 }
+
+// Animaciones ligadas al scroll: solo se aplican si el navegador las soporta
+// y el usuario no ha pedido reducir el movimiento (mejora progresiva)
+@mixin scroll-driven {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      @content;
+    }
+  }
+}
+
+// Aparición del elemento al entrar en pantalla con los keyframes indicados
+@mixin reveal-on-scroll($name, $range: entry 0% cover 30%) {
+  @include scroll-driven {
+    animation-name: $name;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+    animation-range: $range;
+    animation-timeline: view();
+  }
+}
