@@ -8,6 +8,15 @@ $timeline-band-padding: 48px;
 $timeline-card-max-width: 560px;
 $timeline-image-opacity: 0.8;
 
+// Tramo de foco de cada franja, compartido por la imagen y la silueta:
+// antes de start aparecen, entre start y end están completas, después se apagan
+$timeline-focus-start: 20%;
+$timeline-focus-end: 80%;
+
+// Tamaño de las siluetas
+$timeline-art-size: 240px;
+$timeline-art-size-sm: 160px;
+
 // Pisadas: ancho de la columna y proporciones del viewBox de footprints.svg.
 // Si cambias el viewBox del SVG, actualiza aquí sus dos medidas
 $timeline-footprint-width: 42px;
@@ -154,6 +163,40 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
     @include reveal-on-scroll(timeline-card-fade, cover 0% cover 100%);
   }
 
+    // Silueta animada de la parada (SVG decorativo).
+  // Móvil: debajo de la tarjeta. Escritorio: centrada en el lado libre de la franja
+  &__art {
+    width: rem($timeline-art-size-sm);
+    height: rem($timeline-art-size-sm);
+
+    @include mq("lg") {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: calc(var(--timeline-art-center) - #{rem($timeline-art-size * 0.5)});
+      width: rem($timeline-art-size);
+      height: rem($timeline-art-size);
+      margin-block: auto;
+    }
+  }
+
+  // Trazo dorado y relleno suave
+  &__art-path {
+    fill: $color-art-fill;
+    stroke: $color-accent-on-band;
+    stroke-width: 6;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+
+    // Con soporte, el dibujo sigue al scroll, sincronizado con la imagen de la franja
+    @include scroll-driven {
+      animation-name: timeline-art-draw;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: cover 0% cover 100%;
+      animation-timeline: --timeline-stop;
+    }
+  }
+
   &__text {
     margin-block: 0;
   }
@@ -190,10 +233,14 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
 
     // Escritorio: el contenido alterna a cada lado de la ruta central
     @include mq("lg") {
+      --timeline-art-center: 75%;
+
       align-items: flex-end;
       padding-inline: 0 calc(50% + #{rem($timeline-marker-size * 0.5 + $timeline-marker-gap)});
 
       &:nth-child(even) {
+        --timeline-art-center: 25%;
+
         align-items: flex-start;
         padding-inline: calc(50% + #{rem($timeline-marker-size * 0.5 + $timeline-marker-gap)}) 0;
       }
@@ -230,20 +277,48 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
   }
 }
 
-// Fundido a negro: 0 cuando el borde de la franja cruza la línea central,
-// umbral máximo con la franja centrada (meseta entre el 40 % y el 60 %)
+// La imagen aparece, se mantiene en el umbral durante el foco y se apaga (fundido a negro)
 @keyframes timeline-focus {
   0% {
     opacity: 0;
   }
 
-  20%,
-  80% {
+  #{$timeline-focus-start},
+  #{$timeline-focus-end} {
     opacity: $timeline-image-opacity;
   }
 
   100% {
     opacity: 0;
+  }
+}
+
+// Silueta: el contorno se dibuja antes del foco, se rellena durante el foco
+// y se desdibuja en sentido inverso al salir, con los mismos tramos que la imagen
+@keyframes timeline-art-draw {
+  0% {
+    fill-opacity: 0;
+    stroke-dashoffset: 1;
+  }
+
+  #{$timeline-focus-start} {
+    fill-opacity: 0;
+    stroke-dashoffset: 0;
+  }
+
+  #{$timeline-focus-start + 10%},
+  #{$timeline-focus-end - 10%} {
+    fill-opacity: 1;
+  }
+
+  #{$timeline-focus-end} {
+    fill-opacity: 0;
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    fill-opacity: 0;
+    stroke-dashoffset: 1;
   }
 }
 

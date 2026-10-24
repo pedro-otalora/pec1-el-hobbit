@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+// La página es oscura: barras de scroll y controles nativos en modo oscuro
+:root {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   font-family: $font-family-body;
@@ -21,6 +26,7 @@ h4 {
   font-family: $font-family-heading;
   line-height: $line-height-heading;
   letter-spacing: $letter-spacing-heading;
+  color: $color-heading;
 }
 
 a {

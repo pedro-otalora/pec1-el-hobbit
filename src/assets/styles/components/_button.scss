@@ -5,13 +5,13 @@
   padding: rem(12px) rem(24px);
   text-decoration: none;
 
-    &--primary {
+  &--primary {
     font-weight: 700;
-    color: $color-white;
-    background-color: $color-shire;
+    color: $color-button-text;
+    background-color: $color-button-bg;
 
     &:hover {
-      background-color: $color-ink;
+      background-color: $color-button-bg-hover;
     }
   }
 }

@@ -12,36 +12,41 @@ $letter-spacing-heading: 0.06em; // espaciado de rótulo de mapa para Cinzel
 // ==========================================================
 // Paleta (valores base)
 // ==========================================================
-$color-parchment: #f4ecd8;
-$color-ink: #2b2118;
-$color-shire: #3f5e3a;
-$color-gold: #b8860b;
-$color-dragon: #8b2e1f;
-$color-white: #fff;
 $color-black: #000;
 $color-black-90: #1a1a1a;
+$color-black-85: #262626;
+$color-parchment: #f4ecd8;
+$color-gold: #b8860b;
+$color-gold-light: #d9a93f;
 $color-dragon-dark: #4a0d08;
+$color-white: #fff;
 
 // ==========================================================
-// Colores por función (los componentes solo usan estos)
+// Colores por función (los componentes solo usan estos).
+// Contrastes sobre negro / negro 90 / negro 85: ver memoria 5.3
 // ==========================================================
-$color-bg: $color-parchment;
-$color-bg-alt: color.adjust($color-parchment, $lightness: -5%);
-$color-surface: color.adjust($color-parchment, $lightness: 4%);
-$color-text: $color-ink;
-$color-link: $color-shire;
-$color-accent: $color-gold;     // solo decoración: no llega al contraste mínimo para texto
-$color-focus: $color-dragon;
-$color-shadow: color.change($color-ink, $alpha: 0.3);
+$color-bg: $color-black;
+$color-bg-alt: $color-black-90;
+$color-surface: $color-black-85;
+$color-text: $color-parchment;          // 12,9:1 o más
+$color-heading: $color-gold;            // 4,65:1 o más: válido también como texto normal
+$color-link: $color-gold-light;         // 7:1 o más, siempre subrayado
+$color-accent: $color-gold;             // decoración: filetes, ornamentos, pisadas
+$color-focus: $color-gold-light;        // 9,7:1 sobre negro
+$color-button-bg: $color-gold;
+$color-button-bg-hover: $color-gold-light;
+$color-button-text: $color-black;       // 6,45:1 sobre oro y 9,7:1 sobre oro claro
+$color-shadow: color.change($color-black, $alpha: 0.6);
 
-// Franjas del viaje (avance de la paleta oscura)
-$color-band: $color-black;
-$color-band-alt: $color-black-90;
+// Franjas del viaje: reutilizan los colores globales
+$color-band: $color-bg;
+$color-band-alt: $color-bg-alt;
 $color-band-dragon: $color-dragon-dark;
-$color-text-on-band: $color-white;
-$color-accent-on-band: $color-gold;   // 4,77:1 o más sobre las tres franjas
+$color-text-on-band: $color-text;
+$color-accent-on-band: $color-gold;     // 4,77:1 o más sobre las tres franjas
 $color-card-on-band: color.change($color-black, $alpha: 0.85);
-$color-mask: $color-black;            // mask-image solo usa su opacidad
+$color-mask: $color-black;              // mask-image solo usa su opacidad
+$color-art-fill: color.change($color-gold, $alpha: 0.35);
 
 // ==========================================================
 // Layout
