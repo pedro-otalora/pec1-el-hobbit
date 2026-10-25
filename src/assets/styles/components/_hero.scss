@@ -45,7 +45,7 @@ $hero-art-size: 560px;
   &__content {
     @include motion-safe {
       animation-name: hero-rise;
-      animation-duration: 1s;
+      animation-duration: 5s;
       animation-timing-function: ease-out;
       animation-delay: 0.4s;
       animation-fill-mode: both;

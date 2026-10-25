@@ -53,6 +53,7 @@ $color-art-fill: color.change($color-gold, $alpha: 0.35);
 // Layout
 // ==========================================================
 $container-max-width: 1100px;
+$gutter: 16px; // margen lateral de las secciones en móvil y tablet
 
 // Breakpoints mobile first (se usan con el mixin mq)
 $breakpoints: (

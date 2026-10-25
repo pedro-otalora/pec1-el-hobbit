@@ -2,7 +2,7 @@
 
 .section {
   // Centra el contenido sin necesidad de un contenedor extra en el HTML
-  padding: rem(48px) max(rem(16px), calc((100% - #{$container-max-width}) / 2));
+  padding: rem(48px) max(rem($gutter), calc((100% - #{$container-max-width}) / 2));
 
   &--alt {
     background-color: $color-bg-alt;
@@ -23,7 +23,34 @@
     margin-block: 0;
   }
 
+  // Cita destacada con su atribución (nota personal en la Sinopsis)
+  &__quote {
+    max-width: rem(720px);
+    padding-inline-start: rem(24px);
+    margin-block: rem(40px) 0;
+    margin-inline: auto;
+    border-inline-start: 3px solid $color-accent;
+  }
+
+  &__quote-text {
+    margin: 0;
+    font-size: rem(20px);
+    font-style: italic;
+  }
+
+  &__quote-author {
+    margin-block-start: rem(12px);
+    font-size: rem(14px);
+    color: $color-heading;
+  }
+
   @include mq("md") {
     padding-block: rem(80px);
+  }
+
+  // Sin relleno inferior: el contenido llega hasta el final de la sección (El viaje).
+  // Va después de la media query para que su padding-block no lo anule
+  &--flush-end {
+    padding-block-end: 0;
   }
 }

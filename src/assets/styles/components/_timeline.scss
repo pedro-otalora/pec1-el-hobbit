@@ -1,30 +1,34 @@
 @use "sass:math";
 @use "../tools" as *;
 
-// Medidas del viaje
-$timeline-marker-size: 48px;
+// Medidas del viaje (móvil / escritorio)
+$timeline-marker-size: 80px;
+$timeline-marker-size-lg: 128px;
 $timeline-marker-gap: 24px;
 $timeline-band-padding: 48px;
-$timeline-card-max-width: 560px;
 $timeline-image-opacity: 0.8;
 
-// Tramo de foco de cada franja, compartido por la imagen y la silueta:
-// antes de start aparecen, entre start y end están completas, después se apagan
+@if $timeline-image-opacity >= 1 {
+  @error "$timeline-image-opacity debe ser menor que 1 para no comprometer la lectura del texto.";
+}
+
+// Tramo de foco de cada franja: antes de start la imagen aparece,
+// entre start y end está en el umbral y después se apaga
 $timeline-focus-start: 20%;
 $timeline-focus-end: 80%;
 
-// Tamaño de las siluetas
-$timeline-art-size: 240px;
-$timeline-art-size-sm: 160px;
-
-// Pisadas: ancho de la columna y proporciones del viewBox de footprints.svg.
-// Si cambias el viewBox del SVG, actualiza aquí sus dos medidas
-$timeline-footprint-width: 42px;
+// Pisadas: ancho de la columna (móvil / escritorio) y proporciones del viewBox
+// de footprints.svg. Si cambias el viewBox del SVG, actualiza aquí sus medidas
+$timeline-footprint-width: 63px;
+$timeline-footprint-width-lg: 84px;
 $footprint-tile-width: 52;
 $footprint-tile-height: 100;
 
-// Alto de un pie en pantalla (media baldosa): es el salto de la animación
-$timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-height, $footprint-tile-width * 2);
+// Alto de un pie en pantalla (media baldosa) para un ancho de columna dado:
+// es el salto con el que aparecen las pisadas
+@function footprint-step($width) {
+  @return math.div($width * $footprint-tile-height, $footprint-tile-width * 2);
+}
 
 // Progreso de la ruta como propiedad registrada: al tener tipo (<percentage>)
 // el navegador puede animarla. El valor inicial del 100 % deja la ruta completa
@@ -49,8 +53,8 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
     view-timeline-inset: 0% 40%;
   }
 
-    // Ruta de pisadas de hobbit: el SVG hace de máscara y el color lo pone
-  // background-color, así se pueden recolorear cambiando solo la variable
+  // Ruta de pisadas de hobbit: el SVG hace de máscara y el color lo pone
+  // background-color. Se descubre a saltos de un pie entero con round()
   &::before {
     position: absolute;
     inset-block: 0;
@@ -59,17 +63,16 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
     width: rem($timeline-footprint-width);
     content: "";
     background-color: $color-accent;
-
-    // Descubre la ruta a saltos de un pie entero: round() redondea hacia abajo
-    // el progreso al múltiplo más cercano del alto de un pie
-    clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem($timeline-footprint-step)})));
+    clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem(footprint-step($timeline-footprint-width))})));
     mask-image: url("/src/assets/images/footprints.svg");
     mask-repeat: repeat-y;
     mask-position: top;
     mask-size: 100% auto;
-    
+
     @include mq("lg") {
-      inset-inline-start: calc(50% - #{rem($timeline-footprint-width * 0.5)});
+      inset-inline-start: calc(50% - #{rem($timeline-footprint-width-lg * 0.5)});
+      width: rem($timeline-footprint-width-lg);
+      clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem(footprint-step($timeline-footprint-width-lg))})));
     }
 
     @include scroll-driven {
@@ -81,57 +84,88 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
     }
   }
 
-  // Medallón con el icono de la parada, centrado sobre la ruta
+  // Medallón con la silueta de la parada. Toma el color de su franja para tapar
+  // las pisadas que pasan por debajo. En escritorio se centra en vertical
   &__icon {
     position: absolute;
     inset-block-start: rem($timeline-band-padding);
     inset-inline-start: 0;
     z-index: 2;
-    display: grid;
-    place-items: center;
     width: rem($timeline-marker-size);
     height: rem($timeline-marker-size);
-    font-size: rem(20px);
-    color: $color-accent-on-band;
-    background-color: $color-band;
-    border: 2px solid $color-accent-on-band;
+    padding: rem(12px);
+    background-color: var(--timeline-band);
     border-radius: 50%;
 
     @include mq("lg") {
-      inset-inline-start: calc(50% - #{rem($timeline-marker-size * 0.5)});
+      inset-block: 0;
+      inset-inline-start: calc(50% - #{rem($timeline-marker-size-lg * 0.5)});
+      width: rem($timeline-marker-size-lg);
+      height: rem($timeline-marker-size-lg);
+      padding: rem(16px);
+      margin-block: auto;
     }
 
     @include reveal-on-scroll(timeline-reveal);
   }
 
-  // Cartela con el nombre de la parada
+  &__icon-path {
+    fill: $color-art-fill;
+    stroke: $color-accent-on-band;
+    stroke-width: 12;
+    stroke-linejoin: round;
+  }
+
+  // Título de la parada con el ornamento de mapa
   &__title {
-    padding: rem(8px) rem(16px);
     margin-block: 0;
     color: $color-accent-on-band;
-    background-color: $color-card-on-band;
-    border: 1px solid $color-accent-on-band;
 
+    @include ornament($color: $color-accent-on-band);
     @include reveal-on-scroll(timeline-reveal);
   }
 
-  // Fondo de la franja: ocupa toda la parada y sale del contenedor
-  // hasta los bordes de la ventana; el color lo decide cada parada
-  &__figure {
-    position: absolute;
-    inset-block: 0;
-    inset-inline: calc(50% - 50vw);
-    z-index: -1;
-    margin: 0;
-    background-color: var(--timeline-band);
+  &__card {
+    display: grid;
+    gap: rem(16px);
+
+    @include reveal-on-scroll(timeline-card-fade, cover 0% cover 100%);
   }
 
-  // La imagen se funde con la franja arriba y abajo gracias a mask-image
+  &__text {
+    margin-block: 0;
+  }
+
+    // Imagen de la parada. Móvil: después del texto (order), en 16:9 y llegando
+  // al borde derecho y al final de la franja con márgenes negativos.
+  // Escritorio: ocupa la mitad libre de la franja, de arriba abajo y hasta el borde
+  &__figure {
+    position: relative;
+    order: 1;
+    margin-block: 0 rem(-$timeline-band-padding);
+    margin-inline: 0 rem(-$gutter);
+
+    @include mq("lg") {
+      position: absolute;
+      inset-block: 0;
+      inset-inline: var(--timeline-figure-inset);
+      margin: 0;
+    }
+  }
+
+  // Se funde con la franja hacia el centro (o hacia arriba en móvil) con mask-image.
+  // La dirección la marca cada parada con --timeline-fade
   &__image {
     width: 100%;
-    height: 100%;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
     opacity: $timeline-image-opacity;
+    mask-image: linear-gradient(var(--timeline-fade), transparent, $color-mask 40%);
+
+    @include mq("lg") {
+      height: 100%;
+      aspect-ratio: auto;
+    }
 
     // Con soporte, la opacidad sigue al scroll: máxima con la franja en el centro
     @include scroll-driven {
@@ -150,70 +184,23 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
     font-size: rem(12px);
   }
 
-  // Tarjeta oscura semitransparente con el relato de la parada
-  &__card {
-    display: grid;
-    gap: rem(16px);
-    max-width: rem($timeline-card-max-width);
-    padding: rem(24px);
-    background-color: $color-card-on-band;
-    border: 1px solid $color-accent-on-band;
-
-    @include reveal-on-scroll(timeline-card-fade, cover 0% cover 100%);
-  }
-
-    // Silueta animada de la parada (SVG decorativo).
-  // Móvil: debajo de la tarjeta. Escritorio: centrada en el lado libre de la franja
-  &__art {
-    width: rem($timeline-art-size-sm);
-    height: rem($timeline-art-size-sm);
-
-    @include mq("lg") {
-      position: absolute;
-      inset-block: 0;
-      inset-inline-start: calc(var(--timeline-art-center) - #{rem($timeline-art-size * 0.5)});
-      width: rem($timeline-art-size);
-      height: rem($timeline-art-size);
-      margin-block: auto;
-    }
-  }
-
-  // Trazo dorado y relleno suave
-  &__art-path {
-    fill: $color-art-fill;
-    stroke: $color-accent-on-band;
-    stroke-width: 6;
-    stroke-linejoin: round;
-    stroke-dasharray: 1;
-
-    // Con soporte, el dibujo sigue al scroll, sincronizado con la imagen de la franja
-    @include scroll-driven {
-      animation-name: timeline-art-draw;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-range: cover 0% cover 100%;
-      animation-timeline: --timeline-stop;
-    }
-  }
-
-  &__text {
-    margin-block: 0;
-  }
-
-  // Cada parada es una franja: como mínimo un tercio de pantalla,
-  // o la altura de su contenido si es mayor
+  // Cada parada es una franja de como mínimo un tercio de pantalla.
+  // El color de fondo se extiende a todo el ancho con border-image
   &__item {
     --timeline-band: #{$color-band};
+    --timeline-fade: to bottom;
 
     position: relative;
     display: flex;
     flex-direction: column;
     gap: rem(16px);
-    align-items: flex-start;
     min-height: 33vh;
     padding-block: rem($timeline-band-padding);
     padding-inline-start: rem($timeline-marker-size + $timeline-marker-gap);
     color: $color-text-on-band;
+    border-image-source: linear-gradient(var(--timeline-band), var(--timeline-band));
+    border-image-slice: 0 fill;
+    border-image-outset: 0 100vmax;
 
     // Franjas alternas. :where() deja la especificidad en la de una sola
     // clase, para que el modificador --dragon pueda sobrescribir el color
@@ -221,27 +208,26 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
       --timeline-band: #{$color-band-alt};
     }
 
-    // Cada franja mide su avance respecto a la línea central de la pantalla:
-    // el inset del 50 % arriba y abajo reduce la «ventana» a esa línea.
-    // Como las franjas están pegadas, una termina justo cuando empieza la siguiente
+    // Cada franja mide su avance respecto a la línea central de la pantalla
     @include scroll-driven {
       view-timeline-name: --timeline-stop;
       view-timeline-axis: block;
       view-timeline-inset: 50%;
     }
 
-    // Escritorio: el contenido alterna a cada lado de la ruta central
+    // Escritorio: el texto ocupa una mitad y la imagen la otra, alternando.
+    // La imagen va del centro al borde de la ventana y se funde hacia el centro
     @include mq("lg") {
-      --timeline-art-center: 75%;
+      --timeline-fade: to right;
+      --timeline-figure-inset: 50% calc(50% - 50vw);
 
-      align-items: flex-end;
-      padding-inline: 0 calc(50% + #{rem($timeline-marker-size * 0.5 + $timeline-marker-gap)});
+      padding-inline: 0 calc(50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)});
 
       &:nth-child(even) {
-        --timeline-art-center: 25%;
+        --timeline-fade: to left;
+        --timeline-figure-inset: calc(50% - 50vw) 50%;
 
-        align-items: flex-start;
-        padding-inline: calc(50% + #{rem($timeline-marker-size * 0.5 + $timeline-marker-gap)}) 0;
+        padding-inline: calc(50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)}) 0;
       }
     }
   }
@@ -263,7 +249,7 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
   }
 }
 
-// El medallón y la cartela aparecen subiendo ligeramente
+// El medallón y el título aparecen subiendo ligeramente
 @keyframes timeline-reveal {
   from {
     opacity: 0;
@@ -292,36 +278,7 @@ $timeline-footprint-step: math.div($timeline-footprint-width * $footprint-tile-h
   }
 }
 
-// Silueta: el contorno se dibuja antes del foco, se rellena durante el foco
-// y se desdibuja en sentido inverso al salir, con los mismos tramos que la imagen
-@keyframes timeline-art-draw {
-  0% {
-    fill-opacity: 0;
-    stroke-dashoffset: 1;
-  }
-
-  #{$timeline-focus-start} {
-    fill-opacity: 0;
-    stroke-dashoffset: 0;
-  }
-
-  #{$timeline-focus-start + 10%},
-  #{$timeline-focus-end - 10%} {
-    fill-opacity: 1;
-  }
-
-  #{$timeline-focus-end} {
-    fill-opacity: 0;
-    stroke-dashoffset: 0;
-  }
-
-  100% {
-    fill-opacity: 0;
-    stroke-dashoffset: 1;
-  }
-}
-
-// La tarjeta aparece al entrar, se mantiene y se desvanece al salir por arriba
+// El texto aparece al entrar, se mantiene y se desvanece al salir por arriba
 @keyframes timeline-card-fade {
   0% {
     opacity: 0;
