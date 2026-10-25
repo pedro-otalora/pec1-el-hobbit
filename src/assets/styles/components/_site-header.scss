@@ -6,7 +6,7 @@
   gap: rem(12px);
   align-items: center;
   justify-content: space-between;
-  padding: rem(12px) rem(16px);
+  padding: rem(12px) rem($gutter);
   background-color: $color-bg;
   border-block-end: 3px solid $color-accent;
 

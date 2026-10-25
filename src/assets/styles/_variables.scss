@@ -19,7 +19,6 @@ $color-parchment: #f4ecd8;
 $color-gold: #b8860b;
 $color-gold-light: #d9a93f;
 $color-dragon-dark: #4a0d08;
-$color-white: #fff;
 
 // ==========================================================
 // Colores por función (los componentes solo usan estos).
@@ -45,25 +44,19 @@ $color-band-alt: $color-bg-alt;
 $color-band-dragon: $color-dragon-dark;
 $color-text-on-band: $color-text;
 $color-accent-on-band: $color-gold;     // 4,77:1 o más sobre las tres franjas
-$color-card-on-band: color.change($color-black, $alpha: 0.85);
+$color-credit-on-band: color.change($color-black, $alpha: 0.85); // fondo de los créditos sobre las fotos
 $color-mask: $color-black;              // mask-image solo usa su opacidad
 $color-art-fill: color.change($color-gold, $alpha: 0.35);
+$color-icon-fill-on-band: color.change($color-parchment, $alpha: 0.35);
 
 // ==========================================================
 // Layout
 // ==========================================================
 $container-max-width: 1100px;
-$gutter: 16px; // margen lateral de las secciones en móvil y tablet
+$gutter: 36px; // margen lateral de las secciones en móvil y tablet
 
 // Breakpoints mobile first (se usan con el mixin mq)
 $breakpoints: (
   "md": 768px,
   "lg": 1024px,
 );
-
-
-// ==========================================================
-// Texturas
-// ==========================================================
-// Grano de papel generado con un filtro SVG de ruido (feTurbulence): sin imágenes
-$texture-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.12'/%3E%3C/svg%3E");

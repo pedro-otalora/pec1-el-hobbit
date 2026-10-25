@@ -6,7 +6,9 @@
 // @import "some-node-module";
 // @import "@some-company/some-node-module";
 
-@import "npm:@fortawesome/fontawesome-free/css/all.css";
+// FontAwesome: solo el núcleo y el estilo solid (todos los iconos usados son "fas")
+@import "npm:@fortawesome/fontawesome-free/css/fontawesome.css";
+@import "npm:@fortawesome/fontawesome-free/css/solid.css";
 @import "npm:@fontsource/cinzel/700.css";
 @import "npm:@fontsource/lora/400.css";
 @import "npm:@fontsource/lora/400-italic.css";

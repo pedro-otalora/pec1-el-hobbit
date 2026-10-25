@@ -11,6 +11,21 @@
   color-scheme: dark;
 }
 
+// Desplazamiento suave al saltar a un ancla, solo si el usuario no ha pedido
+// reducir el movimiento (sin movimiento por defecto)
+html {
+  @include motion-safe {
+    scroll-behavior: smooth;
+  }
+}
+
+// Las franjas del viaje se extienden hasta los bordes de la ventana (100vw).
+// clip recorta el sobrante (el ancho de la barra de scroll) sin crear un
+// contenedor de scroll, que rompería las animaciones ligadas al scroll
+main {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   font-family: $font-family-body;

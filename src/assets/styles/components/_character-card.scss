@@ -37,7 +37,7 @@ $character-card-max-width: 300px;
     outline: 1px solid $color-accent;
     outline-offset: rem(-8px);
     background-color: $color-surface;
-    background-image: $texture-grain, radial-gradient(ellipse at center, transparent 55%, $color-shadow);
+    background-image: radial-gradient(ellipse at center, transparent 55%, $color-shadow);
     border: 2px solid $color-accent;
     border-radius: rem($character-card-radius);
   }

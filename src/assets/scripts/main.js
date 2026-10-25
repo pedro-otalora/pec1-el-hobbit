@@ -1,7 +1,7 @@
 /**
- * Navegación principal
- * - Menú desplegable en móvil. Mejora progresiva: sin JS el menú se ve completo.
- * - Resalta el enlace de la sección visible con aria-current.
+ * Interacción de la página (mejora progresiva: sin JS todo el contenido es accesible)
+ * - Navegación: menú desplegable en móvil y resaltado de la sección visible (aria-current).
+ * - Cartas de personaje: giro entre anverso y reverso (aria-expanded e inert).
  */
 
 const toggle = document.querySelector(".nav-toggle");

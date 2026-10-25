@@ -110,10 +110,7 @@ $footprint-tile-height: 100;
   }
 
   &__icon-path {
-    fill: $color-art-fill;
-    stroke: $color-accent-on-band;
-    stroke-width: 12;
-    stroke-linejoin: round;
+    fill: $color-icon-fill-on-band;
   }
 
   // Título de la parada con el ornamento de mapa
@@ -177,11 +174,15 @@ $footprint-tile-height: 100;
     }
   }
 
+  // Crédito de la foto: fondo semitransparente para que el texto se lea
+  // sea cual sea la zona de la imagen sobre la que cae
   &__credit {
     position: absolute;
     inset-block-end: rem(8px);
     inset-inline-end: rem(16px);
+    padding: rem(2px) rem(8px);
     font-size: rem(12px);
+    background-color: $color-credit-on-band;
   }
 
   // Cada parada es una franja de como mínimo un tercio de pantalla.

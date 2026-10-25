@@ -5,7 +5,7 @@
   padding: rem(24px);
   background-color: $color-surface;
   border: 1px solid $color-bg-alt;
-  border-top: 4px solid $color-accent;
+  border-block-start: 4px solid $color-accent;
 
   &__title {
     margin-block: 0 rem(8px);

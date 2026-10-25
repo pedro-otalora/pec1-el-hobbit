@@ -1,20 +1,44 @@
 @use "../tools" as *;
 
+$media-figure-max-width: 240px;
+
 .media {
   display: grid;
   gap: rem(24px);
 
+  @include mq("md") {
+    grid-template-columns: 1fr 2fr;
+    align-items: start;
+  }
+
+  // Móvil: imagen centrada y contenida; a partir de md ocupa su columna
   &__figure {
-    margin: 0;
+    width: 100%;
+    max-width: rem($media-figure-max-width);
+    margin-block: 0;
+    margin-inline: auto;
+
+    @include mq("md") {
+      max-width: none;
+    }
+  }
+
+  // Marco dorado doble, como las cartas y la ficha, y tono sepia
+  // para integrar la fotografía antigua en la paleta negro y oro
+  &__image {
+    width: 100%;
+    padding: rem(8px);
+    outline: 1px solid $color-accent;
+    outline-offset: rem(-6px);
+    background-color: $color-surface;
+    border: 2px solid $color-accent;
+    border-radius: rem(8px);
+    filter: sepia(0.4);
   }
 
   &__caption {
     margin-block-start: rem(8px);
     font-size: rem(14px);
-  }
-
-  @include mq("md") {
-    grid-template-columns: 1fr 2fr;
-    align-items: start;
+    text-align: center;
   }
 }

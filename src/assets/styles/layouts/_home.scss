@@ -1,14 +1,6 @@
 @use "../tools" as *;
 
-// Layout de la página de inicio: cabecera fija y navegación por anclas
-
-html {
-  scroll-behavior: smooth;
-
-  @media (prefers-reduced-motion: reduce) {
-    scroll-behavior: auto;
-  }
-}
+// Layout de la página de inicio: cabecera fija y margen de las anclas.
 
 // Cabecera fija en todos los anchos
 .site-header {
@@ -19,12 +11,5 @@ html {
 
 // Evita que la cabecera fija tape el título al saltar a un ancla
 .section {
-  scroll-margin-top: rem(80px);
-}
-
-// Las franjas del viaje se extienden hasta los bordes de la ventana (100vw).
-// clip recorta el sobrante (el ancho de la barra de scroll) sin crear un
-// contenedor de scroll, que rompería las animaciones ligadas al scroll
-main {
-  overflow-x: clip;
+  scroll-margin-block-start: rem(80px);
 }
