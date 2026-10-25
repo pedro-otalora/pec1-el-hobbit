@@ -1,5 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 400">
+  <!--
+    Baldosa de 4 pasos (8 huellas) que se repite a lo largo de la ruta.
+    Cada pie ocupa una franja fija de 50 unidades de alto: NO cambies la "y"
+    (el CSS cuenta con ese alto para mostrar las huellas de una en una).
+    Para variar el andar, cambia en cada <use>:
+      - el primer número de translate(): desplazamiento lateral (±2 = sutil, ±4 = marcado)
+      - rotate(GRADOS 10 20): giro del pie (±4 = sutil, ±8 = marcado)
+  -->
   <defs>
+    <!-- Pie izquierdo apuntando hacia arriba: planta + cinco dedos -->
     <g id="foot">
       <path d="M10 39.5C6 39.5 4 36.5 4.5 32.5 5 28.5 4 25 3.5 20 3 14 4.5 9 10 8.5c5.5-.5 8 3 7.5 7.5-.5 4-3.5 6.5-3 11 .5 4 1.5 7 .7 9.5-.8 2.5-2.7 3-5.2 3z"/>
       <ellipse cx="15" cy="4.5" rx="2.6" ry="3.2"/>
@@ -8,7 +17,24 @@
       <ellipse cx="5" cy="4.4" rx="1.35" ry="1.7"/>
       <ellipse cx="3" cy="6.4" rx="1.1" ry="1.4"/>
     </g>
+    <!-- Pie izquierdo caminando hacia abajo y pie derecho (su reflejo) -->
+    <g id="left"><use href="#foot" transform="rotate(180 10 20)"/></g>
+    <g id="right"><use href="#foot" transform="rotate(180 10 20) translate(20 0) scale(-1 1)"/></g>
   </defs>
-  <use href="#foot" transform="translate(32 4) rotate(180 10 20)"/>
-  <use href="#foot" transform="translate(0 54) rotate(180 10 20) translate(20 0) scale(-1 1)"/>
+  <!-- Pie 1: izquierdo (columna derecha) · desplazamiento +0 · giro -3° -->
+  <use href="#left" transform="translate(32 4) rotate(-3 10 20)"/>
+  <!-- Pie 2: derecho (columna izquierda) · desplazamiento +1 · giro +4° -->
+  <use href="#right" transform="translate(1 54) rotate(4 10 20)"/>
+  <!-- Pie 3: izquierdo (columna derecha) · desplazamiento -2 · giro +2° -->
+  <use href="#left" transform="translate(30 104) rotate(2 10 20)"/>
+  <!-- Pie 4: derecho (columna izquierda) · desplazamiento +2 · giro -4° -->
+  <use href="#right" transform="translate(2 154) rotate(-4 10 20)"/>
+  <!-- Pie 5: izquierdo (columna derecha) · desplazamiento -1 · giro +4° -->
+  <use href="#left" transform="translate(31 204) rotate(4 10 20)"/>
+  <!-- Pie 6: derecho (columna izquierda) · desplazamiento +0 · giro -2° -->
+  <use href="#right" transform="translate(0 254) rotate(-2 10 20)"/>
+  <!-- Pie 7: izquierdo (columna derecha) · desplazamiento +2 · giro +3° -->
+  <use href="#left" transform="translate(34 304) rotate(3 10 20)"/>
+  <!-- Pie 8: derecho (columna izquierda) · desplazamiento -1 · giro -3° -->
+  <use href="#right" transform="translate(-1 354) rotate(-3 10 20)"/>
 </svg>

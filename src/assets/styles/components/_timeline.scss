@@ -22,12 +22,13 @@ $timeline-focus-end: 80%;
 $timeline-footprint-width: 63px;
 $timeline-footprint-width-lg: 84px;
 $footprint-tile-width: 52;
-$footprint-tile-height: 100;
+$footprint-tile-height: 400;
+$footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en el viewBox)
 
-// Alto de un pie en pantalla (media baldosa) para un ancho de columna dado:
+// Alto de una huella en pantalla para un ancho de columna dado:
 // es el salto con el que aparecen las pisadas
 @function footprint-step($width) {
-  @return math.div($width * $footprint-tile-height, $footprint-tile-width * 2);
+  @return math.div($width * $footprint-tile-height, $footprint-tile-width * $footprint-tile-steps);
 }
 
 // Progreso de la ruta como propiedad registrada: al tener tipo (<percentage>)
