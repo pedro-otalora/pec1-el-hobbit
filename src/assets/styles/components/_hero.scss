@@ -3,7 +3,11 @@
 // Tamaño máximo de la silueta de fondo
 $hero-art-size: 560px;
 
+// Opacidad de la ilustración de fondo: da atmósfera sin competir con el texto
+$hero-image-opacity: 0.4;
+
 .hero {
+  position: relative;
   display: grid;
   place-items: center;
   min-height: 85svh;
@@ -12,10 +16,32 @@ $hero-art-size: 560px;
   text-align: center;
   background-image: radial-gradient(ellipse at center, $color-hero-glow, transparent 70%);
 
+  // Ilustración a sangre por detrás de todo; se funde con el negro por abajo
+  &__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: $hero-image-opacity;
+    mask-image: linear-gradient(to bottom, $color-mask 50%, transparent);
+
+    // Paralaje: al salir el hero, la imagen baja y parece moverse más despacio
+    @include scroll-driven {
+      animation-name: hero-parallax;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: exit;
+      animation-timeline: view();
+    }
+  }
+
   // La silueta y el contenido ocupan la misma celda de la rejilla:
-  // quedan superpuestos y centrados sin posicionamiento absoluto
+  // quedan superpuestos y centrados. position: relative los pinta
+  // por encima de la imagen, que está posicionada
   &__art,
   &__content {
+    position: relative;
     grid-area: 1 / 1;
   }
 
@@ -23,6 +49,15 @@ $hero-art-size: 560px;
     width: min(90vw, #{rem($hero-art-size)});
     height: auto;
     opacity: 0.35;
+
+    // Al bajar, el dragón crece y se desvanece
+    @include scroll-driven {
+      animation-name: hero-art-leave;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-range: exit;
+      animation-timeline: view();
+    }
   }
 
   // Misma técnica de trazo que las siluetas del viaje, pero animada por tiempo
@@ -41,8 +76,12 @@ $hero-art-size: 560px;
     }
   }
 
+  // Velo oscuro tras el texto para asegurar el contraste sobre la ilustración.
   // El texto entra cuando la silueta ya ha empezado a dibujarse
   &__content {
+    padding: rem(24px);
+    background-image: radial-gradient(farthest-side, $color-hero-scrim 50%, transparent);
+
     @include motion-safe {
       animation-name: hero-rise;
       animation-duration: 1s;
@@ -75,6 +114,32 @@ $hero-art-size: 560px;
 
   &__subtitle {
     margin-block: 0 rem(32px);
+  }
+
+  // Invitación a bajar, centrada al pie del hero
+  &__scroll {
+    position: absolute;
+    inset-block-end: rem(24px);
+    inset-inline: 0;
+    display: flex;
+    flex-direction: column;
+    gap: rem(4px);
+    align-items: center;
+    width: fit-content;
+    margin-inline: auto;
+    font-size: rem(14px);
+    color: $color-heading;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  &__scroll-icon {
+    @include motion-safe {
+      animation-name: hero-nudge;
+      animation-duration: 2s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
   }
 
   @include mq("md") {
@@ -110,5 +175,30 @@ $hero-art-size: 560px;
   to {
     opacity: 1;
     translate: none;
+  }
+}
+
+@keyframes hero-parallax {
+  to {
+    translate: 0 30%;
+  }
+}
+
+@keyframes hero-art-leave {
+  to {
+    opacity: 0;
+    scale: 1.3;
+  }
+}
+
+// Pequeño rebote del icono para señalar hacia abajo
+@keyframes hero-nudge {
+  0%,
+  100% {
+    translate: none;
+  }
+
+  50% {
+    translate: 0 rem(6px);
   }
 }

@@ -37,6 +37,7 @@ $color-button-bg-hover: $color-gold-light;
 $color-button-text: $color-black;       // 6,45:1 sobre oro y 9,7:1 sobre oro claro
 $color-shadow: color.change($color-black, $alpha: 0.6);
 $color-hero-glow: color.change($color-gold, $alpha: 0.12);
+$color-hero-scrim: color.change($color-black, $alpha: 0.7); // velo tras el texto del hero
 
 // Franjas del viaje: reutilizan los colores globales
 $color-band: $color-bg;

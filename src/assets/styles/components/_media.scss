@@ -1,14 +1,19 @@
 @use "../tools" as *;
 
 $media-figure-max-width: 240px;
+$media-image-max-height: 300px;
+$media-figure-max-width-md: 400px;
 
 .media {
   display: grid;
   gap: rem(24px);
 
+  // Escritorio: la columna de la imagen se ajusta a la imagen (auto),
+  // el texto ocupa el resto y ambos quedan centrados en vertical
   @include mq("md") {
-    grid-template-columns: 1fr 2fr;
-    align-items: start;
+    grid-template-columns: auto 1fr;
+    gap: rem(48px);
+    align-items: center;
   }
 
   // Móvil: imagen centrada y contenida; a partir de md ocupa su columna
@@ -19,15 +24,19 @@ $media-figure-max-width: 240px;
     margin-inline: auto;
 
     @include mq("md") {
-      max-width: none;
+      width: auto;
+      max-width: rem($media-figure-max-width-md);
     }
   }
 
   // Marco dorado doble, como las cartas y la ficha, y tono sepia
-  // para integrar la fotografía antigua en la paleta negro y oro
+  // para integrar las imágenes antiguas en la paleta negro y oro.
+  // Alto máximo común; el ancho se ajusta solo para no deformar ni recortar
   &__image {
-    width: 100%;
+    width: auto;
+    max-height: rem($media-image-max-height);
     padding: rem(8px);
+    margin-inline: auto;
     outline: 1px solid $color-accent;
     outline-offset: rem(-6px);
     background-color: $color-surface;
@@ -36,9 +45,27 @@ $media-figure-max-width: 240px;
     filter: sepia(0.4);
   }
 
+   // El pie se ajusta al ancho de la imagen en vez de ensanchar la figura
   &__caption {
+    inline-size: 0;
+    min-inline-size: 100%;
     margin-block-start: rem(8px);
     font-size: rem(14px);
     text-align: center;
+  }
+
+  // Imagen a la derecha en escritorio (alternancia entre secciones)
+  &--reverse {
+    @include mq("md") {
+      grid-template-columns: 1fr auto;
+    }
+  }
+}
+
+// En escritorio la imagen pasa a la segunda columna. En el HTML sigue
+// primero, así en móvil todas las secciones empiezan igual: imagen y texto
+.media--reverse .media__figure {
+  @include mq("md") {
+    order: 1;
   }
 }

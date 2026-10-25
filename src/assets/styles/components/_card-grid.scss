@@ -9,6 +9,7 @@
 
   @include mq("md") {
     grid-template-columns: repeat(2, 1fr);
+    gap: rem(40px);
   }
 
   @include mq("lg") {

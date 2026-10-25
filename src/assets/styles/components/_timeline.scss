@@ -7,6 +7,7 @@ $timeline-marker-size-lg: 128px;
 $timeline-marker-gap: 24px;
 $timeline-band-padding: 48px;
 $timeline-image-opacity: 0.8;
+$timeline-image-opacity-min: 0.2;
 
 @if $timeline-image-opacity >= 1 {
   @error "$timeline-image-opacity debe ser menor que 1 para no comprometer la lectura del texto.";
@@ -176,8 +177,8 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
 
   // Cada parada es una franja de como mínimo un tercio de pantalla.
   // El color de fondo se extiende a todo el ancho con border-image
-  &__item {
-    --timeline-band: #{$color-band};
+    &__item {
+    --timeline-band: #{$color-band-alt};
     --timeline-fade: to bottom;
 
     position: relative;
@@ -192,10 +193,12 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     border-image-slice: 0 fill;
     border-image-outset: 0 100vmax;
 
-    // Franjas alternas. :where() deja la especificidad en la de una sola
-    // clase, para que el modificador --dragon pueda sobrescribir el color
-    &:where(:nth-child(even)) {
-      --timeline-band: #{$color-band-alt};
+    // Franjas alternas: impares en gris (la primera continúa el fondo del
+    // título de la sección) y pares en negro. La última siempre en negro.
+    // :where() deja la especificidad en la de una sola clase, para que
+    // el modificador --dragon pueda sobrescribir el color
+    &:where(:nth-child(even), :last-child) {
+      --timeline-band: #{$color-band};
     }
 
     // Cada franja mide su avance respecto a la línea central de la pantalla
@@ -252,10 +255,10 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
   }
 }
 
-// La imagen aparece, se mantiene en el umbral durante el foco y se apaga (fundido a negro)
+// La imagen sube del mínimo al umbral durante el foco y vuelve al mínimo
 @keyframes timeline-focus {
   0% {
-    opacity: 0;
+    opacity: $timeline-image-opacity-min;
   }
 
   #{$timeline-focus-start},
@@ -264,7 +267,7 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
   }
 
   100% {
-    opacity: 0;
+    opacity: $timeline-image-opacity-min;
   }
 }
 

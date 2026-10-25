@@ -21,25 +21,52 @@
 
   &__text {
     margin-block: 0;
+
+    // Separación solo entre párrafos consecutivos: el primero no se
+    // despega del título y el último no añade hueco al final de la sección
+    & + & {
+      margin-block-start: rem(16px);
+    }
   }
 
-  // Cita destacada con su atribución (nota personal en la Sinopsis)
+  // Letra capitular: primera letra en Cinzel dorada ocupando tres líneas.
+  // initial-letter la encaja exacta donde hay soporte; si no, float con
+  // medidas en em (proporcionales al texto) como aproximación
+  &__text--drop-cap::first-letter {
+    float: inline-start;
+    margin-inline-end: rem(12px);
+    font-family: $font-family-heading;
+    font-size: 5.4em;
+    line-height: 0.8;
+    color: $color-heading;
+
+    @supports (initial-letter: 3) {
+      float: none;
+      font-size: inherit;
+      line-height: inherit;
+      initial-letter: 3;
+    }
+  }
+
+  // Cita destacada: bloque centrado entre dos filetes dorados
   &__quote {
-    max-width: rem(720px);
-    padding-inline-start: rem(24px);
-    margin-block: rem(40px) 0;
+    max-width: rem(800px);
+    padding-block: rem(24px);
+    margin-block: rem(56px) 0;
     margin-inline: auto;
-    border-inline-start: 3px solid $color-accent;
+    text-align: center;
+    border-block: 1px solid $color-accent;
   }
 
   &__quote-text {
     margin: 0;
-    font-size: rem(20px);
+    font-size: clamp(#{rem(22px)}, 3vw, #{rem(30px)});
     font-style: italic;
+    line-height: 1.4;
   }
 
   &__quote-author {
-    margin-block-start: rem(12px);
+    margin-block-start: rem(16px);
     font-size: rem(14px);
     color: $color-heading;
   }
