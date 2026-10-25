@@ -44,7 +44,6 @@ $color-band-alt: $color-bg-alt;
 $color-band-dragon: $color-dragon-dark;
 $color-text-on-band: $color-text;
 $color-accent-on-band: $color-gold;     // 4,77:1 o más sobre las tres franjas
-$color-credit-on-band: color.change($color-black, $alpha: 0.85); // fondo de los créditos sobre las fotos
 $color-mask: $color-black;              // mask-image solo usa su opacidad
 $color-art-fill: color.change($color-gold, $alpha: 0.35);
 $color-icon-fill-on-band: color.change($color-parchment, $alpha: 0.35);
