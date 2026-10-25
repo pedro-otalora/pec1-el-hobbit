@@ -73,3 +73,43 @@ const observer = new IntersectionObserver(
 );
 
 sections.forEach((section) => observer.observe(section));
+
+
+// --- Cartas de personaje --------------------------------------------
+
+document.querySelectorAll(".character-card").forEach((card) => {
+  const button = card.querySelector(".character-card__flip");
+  const label = card.querySelector(".character-card__flip-label");
+  const front = card.querySelector(".character-card__face--front");
+  const back = card.querySelector(".character-card__face--back");
+
+  if (!button || !label || !front || !back) {
+    return;
+  }
+
+  // Con JS: modo carta. Se muestra el botón y el reverso queda inactivo
+  card.classList.add("character-card--interactive");
+  button.hidden = false;
+  back.inert = true;
+
+  function flip() {
+    const flipped = button.getAttribute("aria-expanded") !== "true";
+
+    button.setAttribute("aria-expanded", String(flipped));
+    card.classList.toggle("character-card--flipped", flipped);
+    label.textContent = flipped ? "Volver" : "Girar carta";
+
+    // La cara oculta queda inerte: sin foco y fuera del lector de pantalla
+    front.inert = flipped;
+    back.inert = !flipped;
+  }
+
+  button.addEventListener("click", flip);
+
+  // Con el ratón se puede pulsar toda la carta (con teclado se usa el botón)
+  card.addEventListener("click", (event) => {
+    if (!event.target.closest(".character-card__flip")) {
+      flip();
+    }
+  });
+});

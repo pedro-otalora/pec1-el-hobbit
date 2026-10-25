@@ -1,0 +1,171 @@
+@use "../tools" as *;
+
+// Carta de personaje estilo juego de rol: anverso (retrato, emblema y ficha)
+// y reverso (historia). Con JS se gira en 3D; sin JS las dos caras se ven seguidas
+$character-card-radius: 12px;
+$character-card-emblem-size: 44px;
+$character-card-max-width: 300px;
+
+.character-card {
+  display: flex;
+  flex-direction: column;
+  gap: rem(12px);
+  width: 100%;
+  max-width: rem($character-card-max-width);
+  height: 100%;
+  margin-inline: auto;
+  perspective: 1200px;
+
+  &__inner {
+    display: grid;
+    flex-grow: 1;
+    gap: rem(12px);
+    transform-style: preserve-3d;
+
+    @include motion-safe {
+      transition: transform 0.6s ease, translate 0.3s ease;
+    }
+  }
+
+  // Marco de naipe: borde dorado + contorno interior (outline-offset negativo)
+  &__face {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: rem(12px);
+    padding: rem(20px);
+    outline: 1px solid $color-accent;
+    outline-offset: rem(-8px);
+    background-color: $color-surface;
+    background-image: $texture-grain, radial-gradient(ellipse at center, transparent 55%, $color-shadow);
+    border: 2px solid $color-accent;
+    border-radius: rem($character-card-radius);
+  }
+
+  &__face--back {
+    justify-content: center;
+  }
+
+  // Emblema del personaje en la esquina del retrato
+  &__emblem {
+    position: absolute;
+    inset-block-start: rem(28px);
+    inset-inline-end: rem(28px);
+    width: rem($character-card-emblem-size);
+    height: rem($character-card-emblem-size);
+    padding: rem(6px);
+    background-color: $color-bg;
+    border: 1px solid $color-accent;
+    border-radius: 50%;
+  }
+
+  &__emblem-path {
+    fill: $color-art-fill;
+    stroke: $color-accent;
+    stroke-width: 12;
+    stroke-linejoin: round;
+  }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: 50% 25%;
+    object-fit: cover;
+    border: 1px solid $color-accent;
+    border-radius: rem(6px);
+  }
+
+  &__name {
+    margin-block: 0;
+    font-family: $font-family-heading;
+    font-size: rem(20px);
+    color: $color-heading;
+    text-align: center;
+    letter-spacing: $letter-spacing-heading;
+  }
+
+  &__text {
+    margin-block: 0;
+  }
+
+  // Ficha del personaje: pares término-valor
+  &__stats {
+    display: grid;
+    gap: rem(4px);
+    margin-block: 0;
+    font-size: rem(14px);
+  }
+
+  &__stat {
+    display: flex;
+    gap: rem(8px);
+    justify-content: space-between;
+    padding-block: rem(2px);
+    border-block-end: 1px dotted $color-accent;
+  }
+
+  &__stat-term {
+    font-size: rem(12px);
+    color: $color-heading;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  &__stat-value {
+    margin-inline-start: 0;
+  }
+
+  &__flip {
+    display: inline-flex;
+    gap: rem(8px);
+    align-items: center;
+    justify-content: center;
+    padding: rem(12px) rem(16px);
+    font-family: $font-family-heading;
+    font-size: rem(14px);
+    color: $color-heading;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid $color-accent;
+  }
+}
+
+// Estados y modo interactivo, escritos fuera del bloque: el anidado con &
+// confunde a selector-no-qualifying-type al resolver los selectores BEM
+
+.character-card__flip[hidden] {
+  display: none;
+}
+
+.character-card__flip:hover {
+  color: $color-button-text;
+  background-color: $color-button-bg;
+}
+
+// Con JS: toda la carta es pulsable, las dos caras comparten celda
+// y el reverso empieza girado 180°
+.character-card--interactive {
+  cursor: pointer;
+}
+
+.character-card--interactive .character-card__face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+}
+
+.character-card--interactive .character-card__face--back {
+  transform: rotateY(180deg);
+}
+
+// Carta girada: se ve el reverso
+.character-card--flipped .character-card__inner {
+  transform: rotateY(180deg);
+}
+
+// Al pasar el ratón la carta se eleva un poco, invitando a girarla
+.character-card--interactive:hover .character-card__inner {
+  translate: 0 rem(-4px);
+}

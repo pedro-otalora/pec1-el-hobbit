@@ -14,4 +14,11 @@
   @include mq("lg") {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  // Variante de 4 columnas en escritorio (Personajes)
+  &--cols-4 {
+    @include mq("lg") {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
 }
