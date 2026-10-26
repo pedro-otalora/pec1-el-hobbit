@@ -10,11 +10,12 @@ $media-figure-max-width-md: 400px;
   gap: rem(24px);
 
   // En escritorio la columna de la imagen se ajusta y el texto
-  // ocupa el resto, sin fijar anchos para no deformar la imagen
+  // ocupa el resto, sin fijar anchos para no deformar la imagen.
+  // Imagen y texto arrancan a la misma altura, alineados arriba
   @include mq("md") {
     grid-template-columns: auto 1fr;
     gap: rem(48px);
-    align-items: center;
+    align-items: start;
   }
 
   // En móvil la imagen se limita y se centra para no ocupar 
