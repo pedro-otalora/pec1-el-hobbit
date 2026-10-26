@@ -59,9 +59,6 @@
   }
 }
 
-// Animaciones ligadas al scroll: además requieren soporte del navegador
-// (mejora progresiva)
-
 // Animaciones vinculadas al scroll, comprueban el soporte del navegador.
 // Si el navegador no lo soporta el contenido se ve completo.
 @mixin scroll-driven {

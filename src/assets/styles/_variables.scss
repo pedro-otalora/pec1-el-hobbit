@@ -70,8 +70,7 @@ $color-icon-fill-on-band: color.change($color-parchment, $alpha: 0.35);
 $container-max-width: 1100px; // Ancho máximo del contenido para que no se estire en pantallas grandes
 $gutter: 36px; // Margen lateral común para que el contenido quede alineado
 
-// Puntos de corte en mapa con mq()
-// hay un sitio donde cambiarlos
+// Puntos de corte en un mapa para usarlos con mq() y cambiarlos en un solo sitio
 $breakpoints: (
   "md": 768px,
   "lg": 1024px,

@@ -13,9 +13,7 @@ $character-card-max-width: 300px;
   width: 100%;
 
   // Ancho de naipe: en móvil la carta no se estira a toda la pantalla
-  max-width: rem(
-    $character-card-max-width
-  );
+  max-width: rem($character-card-max-width);
   height: 100%; // Las cartas de una misma fila igualan su alto
   margin-inline: auto;
   perspective: 1200px; // Profundidad para que el giro se vea en 3D y no como un estrechamiento
@@ -34,7 +32,7 @@ $character-card-max-width: 300px;
   }
 
   // Marco de naipe: borde dorado + contorno interior.
-  // Se usa en la ficha y en las imágenes de media para unificar el estilo.
+  // La ficha y las imágenes de media usan el mismo estilo
   &__face {
     position: relative;
     display: flex;
@@ -150,7 +148,7 @@ $character-card-max-width: 300px;
   }
 }
 
-// Estados y modo interactivo fuera del bloque, 
+// Estados y modo interactivo fuera del bloque,
 // porque la versión anidada con & no pasaba Stylelint (selector-no-qualifying-type)
 
 // display: inline-flex anula el atributo hidden y sin JS el botón no debe verse

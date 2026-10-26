@@ -73,3 +73,8 @@ $media-figure-max-width-md: 400px;
     order: 1;
   }
 }
+
+// El primer elemento del texto (título o párrafo) arranca a la altura de la imagen
+.media__body > :first-child {
+  margin-block-start: 0;
+}

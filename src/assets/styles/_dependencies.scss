@@ -3,7 +3,7 @@
 // Se usa @import y no @use porque son ficheros CSS de npm, no módulos Sass.
 // Parcel los une en un solo CSS.
 
-// FontAwesome: solo el núcleo y el estilo solid, porque todos los iconos son "fas""
+// FontAwesome: solo el núcleo y el estilo solid, porque todos los iconos son "fas"
 @import "npm:@fortawesome/fontawesome-free/css/fontawesome.css";
 @import "npm:@fortawesome/fontawesome-free/css/solid.css";
 
