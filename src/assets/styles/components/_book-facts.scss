@@ -1,8 +1,8 @@
 @use "../tools" as *;
 
-$book-facts-max-width: 760px;
+$book-facts-max-width: 760px; // Evita líneas demasiado largas en los valores
 
-// Ficha bibliográfica con el mismo marco dorado doble que las cartas de personaje
+// Ficha bibliográfica con el marco doble de las cartas de personaje
 .book-facts {
   max-width: rem($book-facts-max-width);
   padding: rem(24px);
@@ -18,7 +18,8 @@ $book-facts-max-width: 760px;
     padding: rem(40px);
   }
 
-  // Cada par término-valor es una fila separada por una línea de puntos
+  // Cada div agrupa un término con su valor para alinearlos en dos columnas
+  // en escritorio y separarlos con puntos, como en el índice de un libro
   &__row {
     display: grid;
     gap: rem(4px);
@@ -28,7 +29,7 @@ $book-facts-max-width: 760px;
     @include mq("md") {
       grid-template-columns: rem(200px) 1fr;
       gap: rem(24px);
-      align-items: baseline;
+      align-items: baseline; // Término y valor se alinean por la primera línea aunque tengan tamaños distintos
     }
   }
 
@@ -41,11 +42,13 @@ $book-facts-max-width: 760px;
   }
 
   &__value {
-    margin-inline-start: 0;
+    margin-inline-start: 0; // Sin la sangría por defecto de dd, que sobra al ir en columnas
   }
 }
 
-// La última fila no lleva separador (fuera del bloque, por selector-no-qualifying-type)
+// Sin separador en la última fila, porque el marco ya cierra la ficha. Se
+// escribe fuera del bloque porque la versión anidada con & no pasaba
+// Stylelint (selector-no-qualifying-type).
 .book-facts__row:last-child {
   border-block-end: 0;
 }

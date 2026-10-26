@@ -1,6 +1,7 @@
 @use "sass:math";
 
-// Convierte px a rem para respetar el tamaño de fuente del usuario
+// Las medidas se escriben en px y se entregan en rem para que la 
+// página escale con el tamaño de fuente que elija el usuario
 @function rem($px, $base: 16px) {
-  @return math.div($px, $base) * 1rem;
+  @return math.div($px, $base) * 1rem; // math.div, la barra / stá obsoleta en Sass
 }

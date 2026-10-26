@@ -1,5 +1,6 @@
 @use "../tools" as *;
 
+// Pie con el mismo filete que la cabecera, para cerrar la página igual
 .site-footer {
   padding: rem(32px) rem($gutter);
   text-align: center;

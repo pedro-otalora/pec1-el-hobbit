@@ -1,7 +1,8 @@
 @use "../tools" as *;
 
 .section {
-  // Centra el contenido sin necesidad de un contenedor extra en el HTML
+  // Centra el contenido sin un contenedor extra en el HTML; 
+  // max() garantiza el margen lateral en pantallas estrechas
   padding: rem(48px) max(rem($gutter), calc((100% - #{$container-max-width}) / 2));
 
   &--alt {
@@ -29,9 +30,7 @@
     }
   }
 
-  // Letra capitular: primera letra en Cinzel dorada ocupando tres líneas.
-  // initial-letter la encaja exacta donde hay soporte; si no, float con
-  // medidas en em (proporcionales al texto) como aproximación
+  // Letra capitular: primera letra ocupando tres líneas
   &__text--drop-cap::first-letter {
     float: inline-start;
     margin-inline-end: rem(12px);
@@ -48,7 +47,7 @@
     }
   }
 
-  // Cita destacada: bloque centrado entre dos filetes dorados
+  // Cita destacada entre dos filetes, funcione como una pausa
   &__quote {
     max-width: rem(800px);
     padding-block: rem(24px);
@@ -75,7 +74,7 @@
     padding-block: rem(80px);
   }
 
-  // Sin relleno inferior: el contenido llega hasta el final de la sección (El viaje).
+  // Sin relleno inferior: el contenido llega hasta el final de la sección.
   // Va después de la media query para que su padding-block no lo anule
   &--flush-end {
     padding-block-end: 0;

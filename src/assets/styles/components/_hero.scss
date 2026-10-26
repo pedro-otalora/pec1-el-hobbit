@@ -1,6 +1,6 @@
 @use "../tools" as *;
 
-// Tamaño máximo de la silueta de fondo
+// Límite de la silueta para que en pantallas grandes no domine sobre el título
 $hero-art-size: 560px;
 
 // Opacidad de la ilustración de fondo: da atmósfera sin competir con el texto
@@ -14,9 +14,14 @@ $hero-image-opacity: 0.4;
   padding: rem(64px) rem($gutter);
   overflow: clip;
   text-align: center;
-  background-image: radial-gradient(ellipse at center, $color-hero-glow, transparent 70%);
+  background-image: radial-gradient(
+    ellipse at center,
+    $color-hero-glow,
+    transparent 70%
+  );
 
-  // Ilustración a sangre por detrás de todo; se funde con el negro por abajo
+  // Ilustración a sangre detrás del contenido. Se funde a negro
+  // para que no tenga corte con la sección siguiente.
   &__image {
     position: absolute;
     inset: 0;
@@ -26,7 +31,7 @@ $hero-image-opacity: 0.4;
     opacity: $hero-image-opacity;
     mask-image: linear-gradient(to bottom, $color-mask 50%, transparent);
 
-    // Paralaje: al salir el hero, la imagen baja y parece moverse más despacio
+    // Al salir el hero, la imagen se mueve más despacio que el texto para efecto Parallax
     @include scroll-driven {
       animation-name: hero-parallax;
       animation-timing-function: linear;
@@ -36,9 +41,8 @@ $hero-image-opacity: 0.4;
     }
   }
 
-  // La silueta y el contenido ocupan la misma celda de la rejilla:
-  // quedan superpuestos y centrados. position: relative los pinta
-  // por encima de la imagen, que está posicionada
+  // Silueta y contenido comparten celda de la rejilla para superponerse.
+  // position: relative los pinta por encima de la imagen.
   &__art,
   &__content {
     position: relative;
@@ -50,7 +54,7 @@ $hero-image-opacity: 0.4;
     height: auto;
     opacity: 0.35;
 
-    // Al bajar, el dragón crece y se desvanece
+    // El dragón crece y se desvanece con el scroll a la salida del hero
     @include scroll-driven {
       animation-name: hero-art-leave;
       animation-timing-function: linear;
@@ -60,7 +64,8 @@ $hero-image-opacity: 0.4;
     }
   }
 
-  // Misma técnica de trazo que las siluetas del viaje, pero animada por tiempo
+  // Efecto de dibujo a mano: pathLength="1" en el SVG normaliza la longitud
+  // del trazo, así stroke-dasharray: 1 sirve para cualquier silueta
   &__art-path {
     fill: $color-art-fill;
     stroke: $color-accent;
@@ -77,10 +82,14 @@ $hero-image-opacity: 0.4;
   }
 
   // Velo oscuro tras el texto para asegurar el contraste sobre la ilustración.
-  // El texto entra cuando la silueta ya ha empezado a dibujarse
+  // El texto entra cuando la silueta ya ha empezado a dibujarse.
   &__content {
     padding: rem(24px);
-    background-image: radial-gradient(farthest-side, $color-hero-scrim 50%, transparent);
+    background-image: radial-gradient(
+      farthest-side,
+      $color-hero-scrim 50%,
+      transparent
+    );
 
     @include motion-safe {
       animation-name: hero-rise;
@@ -99,7 +108,7 @@ $hero-image-opacity: 0.4;
     letter-spacing: 0.2em;
   }
 
-  // Tipografía fluida: crece con el ancho de pantalla entre 48 y 96 px
+  // Tamaño entre 48 y 96 px para que el título quepa en móvil
   &__title {
     margin-block: rem(8px) rem(16px);
     font-size: clamp(#{rem(48px)}, 12vw, #{rem(96px)});
@@ -107,6 +116,7 @@ $hero-image-opacity: 0.4;
     @include ornament($width: 240px, $align: "center");
   }
 
+  // Cursiva, como se marcan los títulos de obras
   &__original {
     margin-block: 0 rem(8px);
     font-style: italic;
@@ -116,7 +126,7 @@ $hero-image-opacity: 0.4;
     margin-block: 0 rem(32px);
   }
 
-  // Invitación a bajar, centrada al pie del hero
+  // Indica que hay contenido debajo, porque el hero ocupa casi toda la pantalla
   &__scroll {
     position: absolute;
     inset-block-end: rem(24px);
@@ -147,7 +157,7 @@ $hero-image-opacity: 0.4;
   }
 }
 
-// La silueta se dibuja y después se rellena
+// El relleno espera al 70 % para que primero se vea el trazo, como un boceto
 @keyframes hero-draw {
   0% {
     fill-opacity: 0;
@@ -165,7 +175,6 @@ $hero-image-opacity: 0.4;
   }
 }
 
-// El contenido aparece subiendo ligeramente
 @keyframes hero-rise {
   from {
     opacity: 0;

@@ -1,15 +1,17 @@
 @use "../tools" as *;
 
-// Layout de la página de inicio: cabecera fija y margen de las anclas.
+// Layout de la portada (un parcial por página, convención del boilerplate):
+// reglas que dependen de cómo se combinan los componentes en esta página
 
-// Cabecera fija en todos los anchos
+// Cabecera fija también en móvil: con el menú plegado ocupa una sola fila y
+// la navegación queda siempre a mano
 .site-header {
   position: sticky;
   inset-block-start: 0;
   z-index: 10;
 }
 
-// Evita que la cabecera fija tape el título al saltar a un ancla
+// Reserva el alto de la cabecera fija para que no tape el título al saltar a un ancla
 .section {
   scroll-margin-block-start: rem(80px);
 }

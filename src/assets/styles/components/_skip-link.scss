@@ -1,11 +1,12 @@
 @use "../tools" as *;
 
-// Oculto fuera de pantalla hasta recibir el foco con el teclado
+// Fuera de la vista hasta recibir el foco. 
+// No se usa display: none porque entonces no podría enfocarse con el teclado.
 .skip-link {
   position: absolute;
   inset-block-start: rem(-64px);
   inset-inline-start: rem(16px);
-  z-index: 100;
+  z-index: 100; // Por encima de la cabecera fija (z-index: 10)
   padding: rem(8px) rem(16px);
   color: $color-bg;
   background-color: $color-text;

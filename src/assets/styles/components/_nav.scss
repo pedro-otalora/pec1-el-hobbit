@@ -1,7 +1,7 @@
 @use "../tools" as *;
 
 .nav {
-  // En móvil ocupa una fila completa bajo el logo y el botón
+  // En móvil el menú baja a su propia fila para que los enlaces tengan espacio
   flex-basis: 100%;
 
   @include mq("lg") {
@@ -25,15 +25,15 @@
   &__link {
     position: relative;
     display: inline-block;
-    padding-block: rem(8px);
+    padding-block: rem(8px); // Amplía la zona de clic y táctil sin separar más los enlaces
     font-family: $font-family-heading;
     font-size: rem(13px);
-    color: $color-text;
+    color: $color-text; // Para que el menú no compita con el contenido el oro marca el hover y la sección activa
     text-transform: uppercase;
     letter-spacing: 0.08em;
     text-decoration: none;
 
-    // Subrayado dorado que crece desde el centro
+    // Subrayado como pseudo-elemento para poder animarlo: text-decoration
     &::after {
       position: absolute;
       inset-block-end: rem(2px);
@@ -50,10 +50,11 @@
   }
 }
 
-// Estados escritos fuera del bloque: el anidado con & confunde a
-// selector-no-qualifying-type al resolver los selectores BEM
+// Estados fuera del bloque, porque la versión anidada con & no pasaba
+// Stylelint (selector-no-qualifying-type)
 
-// Con JS activo el menú se pliega en móvil; a partir de lg siempre se ve
+// El menú solo se pliega si el script ha añadido nav--collapsible,
+// sin JS se ve siempre y la navegación no queda bloqueada
 .nav--collapsible:not(.nav--open) {
   display: none;
 
@@ -62,7 +63,8 @@
   }
 }
 
-// Al pasar el ratón y en la sección activa (aria-current lo pone el JS)
+// La sección activa se marca con aria-current en vez de con una clase,
+// para los lectores de pantalla
 .nav__link:hover,
 .nav__link[aria-current="true"] {
   color: $color-link;

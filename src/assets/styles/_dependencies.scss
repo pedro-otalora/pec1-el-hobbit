@@ -1,14 +1,13 @@
-/**
- * Import any npm dependencies in this file
- * see commented examples below
- */
+// Generic (ITCSS): CSS de terceros. Va primero en main.scss para que los
+// estilos propios puedan sobrescribirlo.
+// Se usa @import y no @use porque son ficheros CSS de npm, no módulos Sass.
+// Parcel los une en un solo CSS.
 
-// @import "some-node-module";
-// @import "@some-company/some-node-module";
-
-// FontAwesome: solo el núcleo y el estilo solid (todos los iconos usados son "fas")
+// FontAwesome: solo el núcleo y el estilo solid, porque todos los iconos son "fas""
 @import "npm:@fortawesome/fontawesome-free/css/fontawesome.css";
 @import "npm:@fortawesome/fontawesome-free/css/solid.css";
+
+// Fuentes: solo los pesos y estilos que usa la página
 @import "npm:@fontsource/cinzel/700.css";
 @import "npm:@fontsource/lora/400.css";
 @import "npm:@fontsource/lora/400-italic.css";

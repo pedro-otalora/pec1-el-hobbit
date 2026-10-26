@@ -1,5 +1,6 @@
 @use "../tools" as *;
 
+// Rejilla de tarjetas (solo contenedor, sin estilos para las tarjetas)
 .card-grid {
   display: grid;
   gap: rem(24px);
@@ -16,7 +17,7 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  // Variante de 4 columnas en escritorio (Personajes)
+  // Cuatro columnas en escritorio para que los cuatro personajes quepan en una fila
   &--cols-4 {
     @include mq("lg") {
       grid-template-columns: repeat(4, 1fr);

@@ -1,9 +1,9 @@
-/**
- * Use this file to import partials.
- * Do not include SCSS code in this file.
- */
+// Punto de entrada de los estilos: solo carga capas, sin reglas propias,
+// para que el orden del CSS final se lea en un único sitio.
+// El orden sigue ITCSS, de menor a mayor especificidad, para que cada capa
+// sobrescriba a la anterior sin recurrir a !important. _variables.scss y
+// tools/ no aparecen porque no generan CSS: los carga cada parcial con @use.
 
-// El orden de @use determina el orden del CSS final (ITCSS: de genérico a específico)
 @use "dependencies";
 @use "elements";
 @use "layouts/home";

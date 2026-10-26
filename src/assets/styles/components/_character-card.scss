@@ -11,10 +11,14 @@ $character-card-max-width: 300px;
   flex-direction: column;
   gap: rem(12px);
   width: 100%;
-  max-width: rem($character-card-max-width);
-  height: 100%;
+
+  // Ancho de naipe: en móvil la carta no se estira a toda la pantalla
+  max-width: rem(
+    $character-card-max-width
+  );
+  height: 100%; // Las cartas de una misma fila igualan su alto
   margin-inline: auto;
-  perspective: 1200px;
+  perspective: 1200px; // Profundidad para que el giro se vea en 3D y no como un estrechamiento
 
   &__inner {
     display: grid;
@@ -23,11 +27,14 @@ $character-card-max-width: 300px;
     transform-style: preserve-3d;
 
     @include motion-safe {
-      transition: transform 0.6s ease, translate 0.3s ease;
+      transition:
+        transform 0.6s ease,
+        translate 0.3s ease;
     }
   }
 
-  // Marco de naipe: borde dorado + contorno interior (outline-offset negativo)
+  // Marco de naipe: borde dorado + contorno interior.
+  // Se usa en la ficha y en las imágenes de media para unificar el estilo.
   &__face {
     position: relative;
     display: flex;
@@ -37,16 +44,23 @@ $character-card-max-width: 300px;
     outline: 1px solid $color-accent;
     outline-offset: rem(-8px);
     background-color: $color-surface;
-    background-image: radial-gradient(ellipse at center, transparent 55%, $color-shadow);
+
+    // Viñeta oscura en los bordes para dar a la carta un aspecto envejecido
+    background-image: radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      $color-shadow
+    );
     border: 2px solid $color-accent;
     border-radius: rem($character-card-radius);
   }
 
+  // El reverso se centra en vertical para que no quede todo arriba
   &__face--back {
     justify-content: center;
   }
 
-  // Emblema del personaje en la esquina del retrato
+  // Emblema en la esquina de la carta como en los naipes
   &__emblem {
     position: absolute;
     inset-block-start: rem(28px);
@@ -68,6 +82,9 @@ $character-card-max-width: 300px;
 
   &__image {
     width: 100%;
+
+    // Fotos cuadradas aunque los originales tengan otras proporciones.
+    // Encuadre alto para no cortar las caras.
     aspect-ratio: 1;
     object-fit: cover;
     object-position: 50% 25%;
@@ -75,6 +92,7 @@ $character-card-max-width: 300px;
     border-radius: rem(6px);
   }
 
+  // Estilo explícito porque lo comparten el h3 del anverso y el p del reverso
   &__name {
     margin-block: 0;
     font-family: $font-family-heading;
@@ -88,7 +106,7 @@ $character-card-max-width: 300px;
     margin-block: 0;
   }
 
-  // Ficha del personaje: pares término-valor
+  // Datos del personaje como lista de descripción porque son pares término-valor
   &__stats {
     display: grid;
     gap: rem(4px);
@@ -112,7 +130,7 @@ $character-card-max-width: 300px;
   }
 
   &__stat-value {
-    margin-inline-start: 0;
+    margin-inline-start: 0; // Quita la sangría del dd
   }
 
   &__flip {
@@ -132,9 +150,10 @@ $character-card-max-width: 300px;
   }
 }
 
-// Estados y modo interactivo, escritos fuera del bloque: el anidado con &
-// confunde a selector-no-qualifying-type al resolver los selectores BEM
+// Estados y modo interactivo fuera del bloque, 
+// porque la versión anidada con & no pasaba Stylelint (selector-no-qualifying-type)
 
+// display: inline-flex anula el atributo hidden y sin JS el botón no debe verse
 .character-card__flip[hidden] {
   display: none;
 }
@@ -144,7 +163,7 @@ $character-card-max-width: 300px;
   background-color: $color-button-bg;
 }
 
-// Con JS: toda la carta es pulsable, las dos caras comparten celda
+// Con JS toda la carta es pulsable, las dos caras comparten celda
 // y el reverso empieza girado 180°
 .character-card--interactive {
   cursor: pointer;
@@ -159,12 +178,12 @@ $character-card-max-width: 300px;
   transform: rotateY(180deg);
 }
 
-// Carta girada: se ve el reverso
+// Se aplica el giro al contenedor y las dos caras giran juntas
 .character-card--flipped .character-card__inner {
   transform: rotateY(180deg);
 }
 
-// Al pasar el ratón la carta se eleva un poco, invitando a girarla
+// Al pasar el ratón la carta se levanta un poco para invitar a pulsar
 .character-card--interactive:hover .character-card__inner {
   translate: 0 rem(-4px);
 }

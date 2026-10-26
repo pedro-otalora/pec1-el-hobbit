@@ -1,4 +1,5 @@
-// Punto de entrada único: variables, funciones y mixins
+// Punto de entrada de Tools: con @forward, cada parcial obtiene variables,
+// funciones y mixins con una sola línea (@use "../tools" as *)
 @forward "../variables";
 @forward "functions";
 @forward "mixins";

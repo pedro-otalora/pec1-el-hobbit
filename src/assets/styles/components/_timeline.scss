@@ -1,7 +1,7 @@
 @use "sass:math";
 @use "../tools" as *;
 
-// Medidas del viaje (móvil / escritorio)
+// Medidas del viaje. Variables locales porque dependen unas de otras.
 $timeline-marker-size: 80px;
 $timeline-marker-size-lg: 128px;
 $timeline-marker-gap: 24px;
@@ -9,6 +9,8 @@ $timeline-band-padding: 48px;
 $timeline-image-opacity: 0.8;
 $timeline-image-opacity-min: 0.2;
 
+// La imagen nunca puede ser del todo opaca: el texto de la parada debe
+// seguir siendo legible aunque se cambie el valor
 @if $timeline-image-opacity >= 1 {
   @error "$timeline-image-opacity debe ser menor que 1 para no comprometer la lectura del texto.";
 }
@@ -18,23 +20,25 @@ $timeline-image-opacity-min: 0.2;
 $timeline-focus-start: 20%;
 $timeline-focus-end: 80%;
 
-// Pisadas: ancho de la columna (móvil / escritorio) y proporciones del viewBox
-// de footprints.svg. Si cambias el viewBox del SVG, actualiza aquí sus medidas
+// Pisadas: ancho de la columna (móvil / escritorio) y proporciones del
+// viewBox de footprints.svg. Si cambia el viewBox, hay que actualizar las medidas.
 $timeline-footprint-width: 63px;
 $timeline-footprint-width-lg: 84px;
 $footprint-tile-width: 52;
 $footprint-tile-height: 400;
 $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en el viewBox)
 
-// Alto de una huella en pantalla para un ancho de columna dado:
-// es el salto con el que aparecen las pisadas
+// Alto en pantalla de una huella. Se calcula al compilar para
+// que la ruta avance pie a pie, sin cortar ninguna huella por la mitad.
 @function footprint-step($width) {
-  @return math.div($width * $footprint-tile-height, $footprint-tile-width * $footprint-tile-steps);
+  @return math.div(
+    $width * $footprint-tile-height,
+    $footprint-tile-width * $footprint-tile-steps
+  );
 }
 
-// Progreso de la ruta como propiedad registrada: al tener tipo (<percentage>)
-// el navegador puede animarla. El valor inicial del 100 % deja la ruta completa
-// cuando no hay animación (sin soporte o con reduced-motion)
+// Progreso de la ruta como propiedad registrada: al tener tipo
+// (<percentage>), el navegador puede animarla.
 @property --timeline-route-progress {
   syntax: "<percentage>";
   inherits: false;
@@ -47,34 +51,57 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
   margin-block: 0;
   list-style: none;
 
-  // Línea de tiempo de scroll con nombre: mide el avance por la lista.
-  // El margen inferior del 40 % deja la punta de la ruta al 60 % de la pantalla
+  // Línea de tiempo de scroll con nombre que mide el avance por la lista.
+  // El margen inferior del 40 % deja la punta de la ruta al 60 %
+  // de la pantalla, un poco por delante de la línea de lectura.
   @include scroll-driven {
     view-timeline-name: --timeline-route;
     view-timeline-axis: block;
     view-timeline-inset: 0% 40%;
   }
 
-  // Ruta de pisadas de hobbit: el SVG hace de máscara y el color lo pone
-  // background-color. Se descubre a saltos de un pie entero con round()
+  // Ruta de pisadas de hobbit. El SVG hace de máscara para que el color salga
+  // de las variables y no del fichero; round() la descubre a saltos de un pie entero.
   &::before {
     position: absolute;
     inset-block: 0;
-    inset-inline-start: rem(math.div($timeline-marker-size - $timeline-footprint-width, 2));
+    inset-inline-start: rem(
+      math.div($timeline-marker-size - $timeline-footprint-width, 2)
+    );
     z-index: 1;
     width: rem($timeline-footprint-width);
     content: "";
     background-color: $color-accent;
-    clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem(footprint-step($timeline-footprint-width))})));
+    clip-path: inset(
+      0 0
+        calc(
+          100% - round(
+              down,
+              var(--timeline-route-progress),
+              #{rem(footprint-step($timeline-footprint-width))}
+            )
+        )
+    );
     mask-image: url("/src/assets/images/footprints.svg");
     mask-repeat: repeat-y;
     mask-position: top;
     mask-size: 100% auto;
 
     @include mq("lg") {
-      inset-inline-start: calc(50% - #{rem($timeline-footprint-width-lg * 0.5)});
+      inset-inline-start: calc(
+        50% - #{rem($timeline-footprint-width-lg * 0.5)}
+      );
       width: rem($timeline-footprint-width-lg);
-      clip-path: inset(0 0 calc(100% - round(down, var(--timeline-route-progress), #{rem(footprint-step($timeline-footprint-width-lg))})));
+      clip-path: inset(
+        0 0
+          calc(
+            100% - round(
+                down,
+                var(--timeline-route-progress),
+                #{rem(footprint-step($timeline-footprint-width-lg))}
+              )
+          )
+      );
     }
 
     @include scroll-driven {
@@ -86,8 +113,8 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     }
   }
 
-  // Medallón con la silueta de la parada. Toma el color de su franja para tapar
-  // las pisadas que pasan por debajo. En escritorio se centra en vertical
+  // Medallón con la silueta de la parada. Toma el color de su franja para
+  // tapar las pisadas que pasan por debajo.
   &__icon {
     position: absolute;
     inset-block-start: rem($timeline-band-padding);
@@ -115,7 +142,7 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     fill: $color-icon-fill-on-band;
   }
 
-  // Título de la parada con el ornamento de mapa
+  // Mismo ornamento que los títulos de sección, en el color legible sobre las franjas
   &__title {
     margin-block: 0;
     color: $color-accent-on-band;
@@ -128,6 +155,7 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     display: grid;
     gap: rem(16px);
 
+    // El texto aparece al entrar, se mantiene y se desvanece al salir por arriba
     @include reveal-on-scroll(timeline-card-fade, cover 0% cover 100%);
   }
 
@@ -135,9 +163,9 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     margin-block: 0;
   }
 
-    // Imagen de la parada. Móvil: después del texto (order), en 16:9 y llegando
-  // al borde derecho y al final de la franja con márgenes negativos.
-  // Escritorio: ocupa la mitad libre de la franja, de arriba abajo y hasta el borde
+  // Imagen de la parada. En móvil va después del texto (order) para leer
+  // primero, y los márgenes negativos la llevan al borde de la franja. En
+  // escritorio ocupa la mitad libre, de arriba abajo.
   &__figure {
     order: 1;
     margin-block: 0 rem(-$timeline-band-padding);
@@ -151,14 +179,18 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     }
   }
 
-  // Se funde con la franja hacia el centro (o hacia arriba en móvil) con mask-image.
-  // La dirección la marca cada parada con --timeline-fade
+  // Fundido hacia el texto para que imagen y franja se vean como una sola
+  // pieza. Cada parada fija la dirección con --timeline-fade.
   &__image {
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     opacity: $timeline-image-opacity;
-    mask-image: linear-gradient(var(--timeline-fade), transparent, $color-mask 40%);
+    mask-image: linear-gradient(
+      var(--timeline-fade),
+      transparent,
+      $color-mask 40%
+    );
 
     @include mq("lg") {
       height: 100%;
@@ -175,9 +207,11 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     }
   }
 
-  // Cada parada es una franja de como mínimo un tercio de pantalla.
-  // El color de fondo se extiende a todo el ancho con border-image
-    &__item {
+  // Cada parada es una franja de al menos un tercio de pantalla, para que se lea de una en una.
+  // border-image extiende el fondo a todo el ancho sin sacar el contenido de su columna.
+  // Las propiedades personalizadas (y no variables Sass) permiten que el
+  // color y el fundido cambien por parada y por punto de corte en el navegador.
+  &__item {
     --timeline-band: #{$color-band-alt};
     --timeline-fade: to bottom;
 
@@ -189,43 +223,52 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
     padding-block: rem($timeline-band-padding);
     padding-inline-start: rem($timeline-marker-size + $timeline-marker-gap);
     color: $color-text-on-band;
-    border-image-source: linear-gradient(var(--timeline-band), var(--timeline-band));
+    border-image-source: linear-gradient(
+      var(--timeline-band),
+      var(--timeline-band)
+    );
     border-image-slice: 0 fill;
     border-image-outset: 0 100vmax;
 
-    // Franjas alternas: impares en gris (la primera continúa el fondo del
-    // título de la sección) y pares en negro. La última siempre en negro.
-    // :where() deja la especificidad en la de una sola clase, para que
-    // el modificador --dragon pueda sobrescribir el color
+    // Franjas alternas en gris y negro.
+    // :where() deja la especificidad en la de una sola clase, para que el
+    // modificador --dragon pueda sobrescribir el color.
     &:where(:nth-child(even), :last-child) {
       --timeline-band: #{$color-band};
     }
 
-    // Cada franja mide su avance respecto a la línea central de la pantalla
+    // Cada franja mide su avance respecto a la línea central de la pantalla,
+    // para que solo se ilumine la imagen de la parada que se está leyendo
     @include scroll-driven {
       view-timeline-name: --timeline-stop;
       view-timeline-axis: block;
       view-timeline-inset: 50%;
     }
 
-    // Escritorio: el texto ocupa una mitad y la imagen la otra, alternando.
-    // La imagen va del centro al borde de la ventana y se funde hacia el centro
+    // En escritorio el texto y la imagen cambian de lado en cada parada para
+    // dar ritmo al recorrido. La imagen se funde hacia el centro.
     @include mq("lg") {
       --timeline-fade: to right;
       --timeline-figure-inset: 50% calc(50% - 50vw);
 
-      padding-inline: 0 calc(50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)});
+      padding-inline: 0
+        calc(
+          50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)}
+        );
 
       &:nth-child(even) {
         --timeline-fade: to left;
         --timeline-figure-inset: calc(50% - 50vw) 50%;
 
-        padding-inline: calc(50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)}) 0;
+        padding-inline: calc(
+            50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)}
+          )
+          0;
       }
     }
   }
 
-  // La Montaña Solitaria: franja roja
+  // Franja roja en la parada de Smaug para destacar
   &__item--dragon {
     --timeline-band: #{$color-band-dragon};
   }
@@ -242,7 +285,6 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
   }
 }
 
-// El medallón y el título aparecen subiendo ligeramente
 @keyframes timeline-reveal {
   from {
     opacity: 0;
@@ -255,7 +297,6 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
   }
 }
 
-// La imagen sube del mínimo al umbral durante el foco y vuelve al mínimo
 @keyframes timeline-focus {
   0% {
     opacity: $timeline-image-opacity-min;
@@ -271,7 +312,6 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
   }
 }
 
-// El texto aparece al entrar, se mantiene y se desvanece al salir por arriba
 @keyframes timeline-card-fade {
   0% {
     opacity: 0;

@@ -1,16 +1,20 @@
 @use "sass:color";
 
+// Settings (ITCSS): todos los valores del proyecto en un único sitio, para
+// poder ajustar el tema sin tocar los componentes
+
 // ==========================================================
 // Tipografía
 // ==========================================================
-$font-family-heading: "Cinzel", "Georgia", serif;
+$font-family-heading: "Cinzel", "Georgia", serif; // Georgia como respaldo
 $font-family-body: "Lora", "Georgia", serif;
-$line-height-base: 1.6;
-$line-height-heading: 1.2;
-$letter-spacing-heading: 0.06em; // espaciado de rótulo de mapa para Cinzel
+$line-height-base: 1.6;                 // Interlineado amplio para leer párrafos largos con comodidad
+$line-height-heading: 1.2;              // Más compacto porque los títulos grandes ocupan varias líneas
+$letter-spacing-heading: 0.06em;        // Cinzel solo tiene mayúsculas y versalitas: separar las letras facilita la lectura
 
 // ==========================================================
-// Paleta (valores base)
+// Paleta base: los únicos colores escritos a mano. Stylelint
+// solo permite hexadecimales en este fichero (color-no-hex)
 // ==========================================================
 $color-black: #000;
 $color-black-90: #1a1a1a;
@@ -21,41 +25,53 @@ $color-gold-light: #d9a93f;
 $color-dragon-dark: #4a0d08;
 
 // ==========================================================
-// Colores por función (los componentes solo usan estos).
-// Contrastes sobre negro / negro 90 / negro 85: ver memoria 5.3
+// Colores por función: los componentes usan estos nombres y no
+// la paleta, para cambiar el tema reasignando solo este bloque.
+// Los ratios son el contraste mínimo sobre los tres fondos
+// (negro, negro 90 y negro 85)
 // ==========================================================
+
+// Tres tonos de negro para distinguir secciones alternas
 $color-bg: $color-black;
 $color-bg-alt: $color-black-90;
 $color-surface: $color-black-85;
-$color-text: $color-parchment;          // 12,9:1 o más
-$color-heading: $color-gold;            // 4,65:1 o más: válido también como texto normal
-$color-link: $color-gold-light;         // 7:1 o más, siempre subrayado
-$color-accent: $color-gold;             // decoración: filetes, ornamentos, pisadas
-$color-focus: $color-gold-light;        // 9,7:1 sobre negro
+$color-text: $color-parchment;          // 12,8:1 como mínimo
+$color-heading: $color-gold;            // 4,65:1 como mínimo: válido también para texto normal (AA)
+$color-link: $color-gold-light;         // 6,9:1 como mínimo; subrayado en el texto corrido para no depender solo del color
+$color-accent: $color-gold;             // Solo decoración (filetes, ornamentos y pisadas)
+$color-focus: $color-gold-light;        // 6,9:1 como mínimo: el foco se distingue en cualquier fondo
+
+// En el botón se invierten los colores
 $color-button-bg: $color-gold;
 $color-button-bg-hover: $color-gold-light;
-$color-button-text: $color-black;       // 6,45:1 sobre oro y 9,7:1 sobre oro claro
+$color-button-text: $color-black;       // 6,45:1 sobre oro y 9,7:1 sobre oro claro (hover)
+
+// Transparencias decorativas
 $color-shadow: color.change($color-black, $alpha: 0.6);
 $color-hero-glow: color.change($color-gold, $alpha: 0.12);
-$color-hero-scrim: color.change($color-black, $alpha: 0.7); // velo tras el texto del hero
+$color-hero-scrim: color.change($color-black, $alpha: 0.7); // Velo tras el texto del hero para mantener el contraste sobre la ilustración
 
-// Franjas del viaje: reutilizan los colores globales
+// Franjas del viaje: alias propios para poder cambiar sus colores sin
+// afectar al resto de la página
 $color-band: $color-bg;
 $color-band-alt: $color-bg-alt;
 $color-band-dragon: $color-dragon-dark;
-$color-text-on-band: $color-text;
-$color-accent-on-band: $color-gold;     // 4,77:1 o más sobre las tres franjas
-$color-mask: $color-black;              // mask-image solo usa su opacidad
+$color-text-on-band: $color-text;       // 13,1:1 como mínimo sobre las tres franjas
+$color-accent-on-band: $color-gold;     // 4,77:1 como mínimo sobre las tres franjas
+$color-mask: $color-black;              // mask-image solo lee la opacidad
+
+// Rellenos semitransparentes decorativos
 $color-art-fill: color.change($color-gold, $alpha: 0.35);
 $color-icon-fill-on-band: color.change($color-parchment, $alpha: 0.35);
 
 // ==========================================================
 // Layout
 // ==========================================================
-$container-max-width: 1100px;
-$gutter: 36px; // margen lateral de las secciones en móvil y tablet
+$container-max-width: 1100px; // Ancho máximo del contenido para que no se estire en pantallas grandes
+$gutter: 36px; // Margen lateral común para que el contenido quede alineado
 
-// Breakpoints mobile first (se usan con el mixin mq)
+// Puntos de corte en mapa con mq()
+// hay un sitio donde cambiarlos
 $breakpoints: (
   "md": 768px,
   "lg": 1024px,

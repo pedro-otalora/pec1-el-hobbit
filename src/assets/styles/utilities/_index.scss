@@ -1,4 +1,5 @@
-// Oculta visualmente pero mantiene el contenido accesible para lectores de pantalla
+// Texto solo para lectores de pantalla (por ejemplo, el aviso de enlace en pestaña nueva).
+// display: none o visibility: hidden también lo ocultarían para ellos.
 .visually-hidden {
   position: absolute;
   width: 1px;

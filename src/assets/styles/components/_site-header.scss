@@ -1,5 +1,6 @@
 @use "../tools" as *;
 
+// Cabecera: logo, botón y menú en una fila flexible.
 .site-header {
   display: flex;
   flex-wrap: wrap;

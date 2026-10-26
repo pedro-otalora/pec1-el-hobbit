@@ -10,17 +10,20 @@ const nav = document.getElementById("main-nav");
 // --- Menú desplegable ---------------------------------------------
 
 function setMenu(open) {
+  // aria-expanded necesita el texto "true" o "false", no un booleano
   toggle.setAttribute("aria-expanded", String(open));
   nav.classList.toggle("nav--open", open);
 
-  // Cambia el icono: tres rayas (abrir) o aspa (cerrar)
+  // El icono muestra la acción disponible: abrir (tres rayas) o cerrar (aspa)
   const icon = toggle.querySelector(".nav-toggle__icon");
   icon.classList.toggle("fa-bars", !open);
   icon.classList.toggle("fa-xmark", open);
 }
 
+// Si falta el botón o el menú, el script no hace nada y la navegación se queda visible
 if (toggle && nav) {
-  // Con JS: se muestra el botón y el menú pasa a ser plegable
+  // El menú solo se pliega cuando el script se ha cargado.
+  // Sin JS sigue visible y el botón sigue oculto.
   toggle.hidden = false;
   nav.classList.add("nav--collapsible");
 
@@ -28,16 +31,21 @@ if (toggle && nav) {
     setMenu(toggle.getAttribute("aria-expanded") !== "true");
   });
 
-  // Al elegir un enlace, el menú se cierra
+  // Un solo listener en el menú en vez de uno por enlace.
+  // Se cierra al elegir un enlace para que no tape la sección de destino.
   nav.addEventListener("click", (event) => {
     if (event.target.closest(".nav__link")) {
       setMenu(false);
     }
   });
 
-  // Escape cierra el menú y devuelve el foco al botón
+  // Escape cierra el menú, como se espera al navegar con teclado,
+  // y el foco vuelve al botón para no perderse en la página
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+    if (
+      event.key === "Escape" &&
+      toggle.getAttribute("aria-expanded") === "true"
+    ) {
       setMenu(false);
       toggle.focus();
     }
@@ -49,10 +57,11 @@ if (toggle && nav) {
 const links = [...document.querySelectorAll(".nav__link")];
 const sections = links
   .map((link) => document.querySelector(link.hash))
+  // Se descartan los enlaces cuyo destino no existe,
+  // para que un ancla mal escrita no rompa el script
   .filter(Boolean);
 
 // La sección activa es la que cruza la línea central de la pantalla
-// (el mismo criterio que el foco de las franjas del viaje)
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -69,25 +78,25 @@ const observer = new IntersectionObserver(
       });
     });
   },
-  { rootMargin: "-50% 0px -50% 0px" }
+  { rootMargin: "-50% 0px -50% 0px" },
 );
 
 sections.forEach((section) => observer.observe(section));
 
-
 // --- Cartas de personaje --------------------------------------------
-
 document.querySelectorAll(".character-card").forEach((card) => {
   const button = card.querySelector(".character-card__flip");
   const label = card.querySelector(".character-card__flip-label");
   const front = card.querySelector(".character-card__face--front");
   const back = card.querySelector(".character-card__face--back");
 
+  // Si falta alguna pieza, la carta se queda en modo estático
   if (!button || !label || !front || !back) {
     return;
   }
 
-  // Con JS: modo carta. Se muestra el botón y el reverso queda inactivo
+  // Con JS: modo carta. Se muestra el botón y el reverso queda inactivo.
+  // Sin script, las dos caras se ven seguidas y no se pierde contenido
   card.classList.add("character-card--interactive");
   button.hidden = false;
   back.inert = true;

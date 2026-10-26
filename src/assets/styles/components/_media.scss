@@ -1,5 +1,6 @@
 @use "../tools" as *;
 
+// Límites de la imagen, alto común aunque tengan proporciones distintas
 $media-figure-max-width: 240px;
 $media-image-max-height: 300px;
 $media-figure-max-width-md: 400px;
@@ -8,15 +9,16 @@ $media-figure-max-width-md: 400px;
   display: grid;
   gap: rem(24px);
 
-  // Escritorio: la columna de la imagen se ajusta a la imagen (auto),
-  // el texto ocupa el resto y ambos quedan centrados en vertical
+  // En escritorio la columna de la imagen se ajusta y el texto
+  // ocupa el resto, sin fijar anchos para no deformar la imagen
   @include mq("md") {
     grid-template-columns: auto 1fr;
     gap: rem(48px);
     align-items: center;
   }
 
-  // Móvil: imagen centrada y contenida; a partir de md ocupa su columna
+  // En móvil la imagen se limita y se centra para no ocupar 
+  // toda la pantalla antes del texto
   &__figure {
     width: 100%;
     max-width: rem($media-figure-max-width);
@@ -45,7 +47,8 @@ $media-figure-max-width-md: 400px;
     filter: sepia(0.4);
   }
 
-   // El pie se ajusta al ancho de la imagen en vez de ensanchar la figura
+  // inline-size: 0 con min-inline-size: 100% hace que el pie 
+  // tome el ancho de la imagen en vez de ensanchar la figura
   &__caption {
     inline-size: 0;
     min-inline-size: 100%;

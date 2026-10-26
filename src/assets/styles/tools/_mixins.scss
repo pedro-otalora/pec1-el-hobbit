@@ -3,8 +3,10 @@
 @use "../variables" as *;
 @use "functions" as *;
 
-// Mobile first: estilos base para móvil, ampliados con min-width
+// Media queries mobile first: los estilos sin mq() son los de móvil y cada
+// punto de corte solo añade cambios (min-width)
 @mixin mq($bp) {
+  // si la mq está mal escrita se detiene la compilación, para que no se quede sin aplicar
   @if not map.has-key($breakpoints, $bp) {
     @error "Breakpoint `#{$bp}` no existe en $breakpoints.";
   }
@@ -14,8 +16,8 @@
   }
 }
 
-// Separador decorativo de mapa (línea ◆ línea) bajo el elemento que lo incluye.
-// Es un pseudo-elemento: no añade marcado ni lo anuncian los lectores de pantalla.
+// Separador línea-rombo-línea debajo de los títulos.
+// Al ser un pseudo-elemento los lectores de pantalla lo ignoran.
 @mixin ornament($color: $color-accent, $width: 160px, $align: "start") {
   @if not list.index(("start", "center"), $align) {
     @error "Alineación `#{$align}` no válida en ornament(): usa \"start\" o \"center\".";
@@ -29,11 +31,19 @@
     margin-block-start: rem(12px);
     content: "";
     background-color: $color;
-    
-    // Recorta el rectángulo en forma de línea con un rombo en el centro
+
+    // El recorte clip-path incluye la forma completa: el rombo y la línea
     clip-path: polygon(
-      0% 40%, 46% 40%, 50% 0%, 54% 40%, 100% 40%,
-      100% 60%, 54% 60%, 50% 100%, 46% 60%, 0% 60%
+      0% 40%,
+      46% 40%,
+      50% 0%,
+      54% 40%,
+      100% 40%,
+      100% 60%,
+      54% 60%,
+      50% 100%,
+      46% 60%,
+      0% 60%
     );
 
     @if $align == "center" {
@@ -51,6 +61,9 @@
 
 // Animaciones ligadas al scroll: además requieren soporte del navegador
 // (mejora progresiva)
+
+// Animaciones vinculadas al scroll, comprueban el soporte del navegador.
+// Si el navegador no lo soporta el contenido se ve completo.
 @mixin scroll-driven {
   @include motion-safe {
     @supports (animation-timeline: view()) {
@@ -64,7 +77,7 @@
   @include scroll-driven {
     animation-name: $name;
     animation-timing-function: ease-out;
-    animation-fill-mode: both;
+    animation-fill-mode: both; // para que se mantenga el estado final de la animación
     animation-range: $range;
     animation-timeline: view();
   }

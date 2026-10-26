@@ -1,27 +1,32 @@
 @use "../tools" as *;
 
+// Elements (ITCSS): estilos de las etiquetas HTML, sin clases, para que toda
+// la página parta de la misma base
 *,
 *::before,
 *::after {
+  // El ancho incluye relleno y borde, así no se hay que descontar a los componentes
   box-sizing: border-box;
 }
 
-// La página es oscura: barras de scroll y controles nativos en modo oscuro
+// Indica al navegador que la página es oscura, para que las barras de scroll
+// y los controles nativos no aparezcan en claro
 :root {
   color-scheme: dark;
 }
 
-// Desplazamiento suave al saltar a un ancla, solo si el usuario no ha pedido
-// reducir el movimiento (sin movimiento por defecto)
+// Desplazamiento suave entre anclas para no perder la orientación al cambiar de sección.
+// Con motion-safe, sin movimiento si el usuario lo ha pedido.
 html {
   @include motion-safe {
     scroll-behavior: smooth;
   }
 }
 
-// Las franjas del viaje se extienden hasta los bordes de la ventana (100vw).
-// clip recorta el sobrante (el ancho de la barra de scroll) sin crear un
-// contenedor de scroll, que rompería las animaciones ligadas al scroll
+// Las franjas del viaje llegan al borde de la ventana (100vw), que incluye
+// el ancho de la barra de scroll. clip recorta ese sobrante sin crear un
+// contenedor de scroll, como haría hidden, que rompería las animaciones
+// ligadas al scroll.
 main {
   overflow-x: clip;
 }
@@ -44,6 +49,7 @@ h4 {
   letter-spacing: $letter-spacing-heading;
 }
 
+// Respuesta al pasar el ratón sin cambiar de color, para no perder contraste
 a {
   color: $color-link;
 
@@ -52,11 +58,15 @@ a {
   }
 }
 
+// Foco solo al navegar con teclado (no al hacer clic) y separado del
+// elemento para que no se confunda con un borde
 :focus-visible {
   outline: 3px solid $color-focus;
   outline-offset: 2px;
 }
 
+// Las imágenes no desbordan su contenedor y, como bloque, no dejan el hueco
+// inferior propio de los elementos en línea
 img {
   display: block;
   max-width: 100%;

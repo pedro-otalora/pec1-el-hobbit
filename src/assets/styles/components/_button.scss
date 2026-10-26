@@ -1,5 +1,7 @@
 @use "../tools" as *;
 
+// Botón de llamada a la acción. La base y el modificador van 
+// separados para añadir variantes sin repetir el relleno
 .button {
   display: inline-block;
   padding: rem(12px) rem(24px);

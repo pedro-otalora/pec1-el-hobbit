@@ -1,6 +1,6 @@
 @use "../tools" as *;
 
-// Botón del menú en móvil: lo muestra el JS y desaparece a partir de lg
+// Botón del menú en móvil. Empieza oculto (hidden) y lo muestra el JS
 .nav-toggle {
   display: inline-flex;
   gap: rem(8px);

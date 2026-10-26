@@ -19,7 +19,8 @@
 
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
-                <img
+        <!-- Fondo decorativo (alt vacío). Sin lazy y con prioridad alta porque es lo primero que se ve -->
+        <img
           class="hero__image"
           src="./assets/images/timeline/cosmic_azalea-hobbit-8802280.png?as=webp&width=1920"
           alt=""
@@ -28,6 +29,7 @@
           fetchpriority="high"
           decoding="async"
         />
+        <!-- Silueta en línea (no <img>) para poder animar el trazo con CSS -->
         <svg class="hero__art" aria-hidden="true" viewBox="0 0 512 512">
           <path
             class="hero__art-path"
@@ -47,9 +49,12 @@
           </p>
           <a class="button button--primary" href="#viaje">Empieza el viaje</a>
         </div>
-                <a class="hero__scroll" href="#introduccion">
+        <a class="hero__scroll" href="#introduccion">
           Desliza
-          <i class="hero__scroll-icon fas fa-chevron-down" aria-hidden="true"></i>
+          <i
+            class="hero__scroll-icon fas fa-chevron-down"
+            aria-hidden="true"
+          ></i>
         </a>
       </section>
 
@@ -371,6 +376,7 @@
         aria-labelledby="personajes-title"
       >
         <h2 class="section__title" id="personajes-title">Personajes</h2>
+        <!-- Cada carta lleva sus dos caras en el HTML para que, sin JS, se lea todo el contenido -->
         <ul class="card-grid card-grid--cols-4" role="list">
           <li class="card-grid__item">
             <article class="character-card" aria-labelledby="pj-bilbo">
@@ -695,6 +701,7 @@
         aria-labelledby="ficha-title"
       >
         <h2 class="section__title" id="ficha-title">Ficha del libro</h2>
+        <!-- Cada div agrupa un término con su valor para maquetarlos como filas -->
         <dl class="book-facts">
           <div class="book-facts__row">
             <dt class="book-facts__term">Título original</dt>
