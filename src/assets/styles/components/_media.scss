@@ -18,7 +18,7 @@ $media-figure-max-width-md: 400px;
     align-items: start;
   }
 
-  // En móvil la imagen se limita y se centra para no ocupar 
+  // En móvil la imagen se limita y se centra para no ocupar
   // toda la pantalla antes del texto
   &__figure {
     width: 100%;
@@ -48,7 +48,7 @@ $media-figure-max-width-md: 400px;
     filter: sepia(0.4);
   }
 
-  // inline-size: 0 con min-inline-size: 100% hace que el pie 
+  // inline-size: 0 con min-inline-size: 100% hace que el pie
   // tome el ancho de la imagen en vez de ensanchar la figura
   &__caption {
     inline-size: 0;
@@ -64,6 +64,25 @@ $media-figure-max-width-md: 400px;
       grid-template-columns: 1fr auto;
     }
   }
+
+  // Imagen protagonista: imagen y texto a partes iguales
+  &--feature {
+    @include mq("md") {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  // Mapa destacado: sin marco ni alto máximo y con tono sepia
+  &__image--parchment {
+    width: 100%;
+    max-height: none;
+    padding: 0;
+    outline: 0;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    filter: sepia(0.6);
+  }
 }
 
 // En escritorio la imagen pasa a la segunda columna. En el HTML sigue
@@ -77,4 +96,9 @@ $media-figure-max-width-md: 400px;
 // El primer elemento del texto (título o párrafo) arranca a la altura de la imagen
 .media__body > :first-child {
   margin-block-start: 0;
+}
+
+// La figura destacada ocupa toda su columna sin los límites de ancho
+.media--feature .media__figure {
+  max-width: none;
 }
