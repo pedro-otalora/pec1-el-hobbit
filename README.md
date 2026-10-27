@@ -4,7 +4,7 @@ Web sobre el libro de *El hobbit*, de J. R. R. Tolkien: sinopsis, el viaje de Bi
 
 Práctica (PEC1) de la asignatura **Herramientas HTML y CSS II** del Máster en Desarrollo de Aplicaciones y Sitios Web de la [Universitat Oberta de Catalunya](https://www.uoc.edu).
 
-- **Web publicada:** [URL de Netlify]
+- **Web publicada:** [https://pec1-el-hobbit.netlify.app/](https://pec1-el-hobbit.netlify.app/)
 - **Autor:** Pedro Otálora Giménez
 
 ## Tecnologías
