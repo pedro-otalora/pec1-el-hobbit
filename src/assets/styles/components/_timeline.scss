@@ -2,9 +2,10 @@
 @use "../tools" as *;
 
 // Medidas del viaje. Variables locales porque dependen unas de otras.
-$timeline-marker-size: 80px;
+$timeline-marker-size: 56px;
 $timeline-marker-size-lg: 128px;
-$timeline-marker-gap: 24px;
+$timeline-marker-gap: 16px;
+$timeline-marker-gap-lg: 24px;
 $timeline-band-padding: 48px;
 $timeline-image-opacity: 0.8;
 $timeline-image-opacity-min: 0.2;
@@ -22,7 +23,7 @@ $timeline-focus-end: 80%;
 
 // Pisadas: ancho de la columna (móvil / escritorio) y proporciones del
 // viewBox de footprints.svg. Si cambia el viewBox, hay que actualizar las medidas.
-$timeline-footprint-width: 63px;
+$timeline-footprint-width: 44px;
 $timeline-footprint-width-lg: 84px;
 $footprint-tile-width: 52;
 $footprint-tile-height: 400;
@@ -253,7 +254,7 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
 
       padding-inline: 0
         calc(
-          50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)}
+          50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap-lg)}
         );
 
       &:nth-child(even) {
@@ -261,7 +262,7 @@ $footprint-tile-steps: 8; // huellas por baldosa (cada una ocupa 50 de alto en e
         --timeline-figure-inset: calc(50% - 50vw) 50%;
 
         padding-inline: calc(
-            50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap)}
+            50% + #{rem($timeline-marker-size-lg * 0.5 + $timeline-marker-gap-lg)}
           )
           0;
       }

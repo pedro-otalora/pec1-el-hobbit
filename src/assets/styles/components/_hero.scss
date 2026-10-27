@@ -10,6 +10,7 @@ $hero-image-opacity: 0.4;
   position: relative;
   display: grid;
   place-items: center;
+  grid-template-columns: minmax(0, 1fr);
   min-height: 85svh;
   padding: rem(64px) rem($gutter);
   overflow: clip;
@@ -50,7 +51,7 @@ $hero-image-opacity: 0.4;
   }
 
   &__art {
-    width: min(90vw, #{rem($hero-art-size)});
+    width: min(100%, #{rem($hero-art-size)});
     height: auto;
     opacity: 0.35;
 
@@ -111,7 +112,7 @@ $hero-image-opacity: 0.4;
   // Tamaño entre 48 y 96 px para que el título quepa en móvil
   &__title {
     margin-block: rem(8px) rem(16px);
-    font-size: clamp(#{rem(48px)}, 12vw, #{rem(96px)});
+    font-size: clamp(#{rem(40px)}, 10vw, #{rem(96px)});
 
     @include ornament($width: 240px, $align: "center");
   }
