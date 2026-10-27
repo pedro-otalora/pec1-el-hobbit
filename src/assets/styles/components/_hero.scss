@@ -9,8 +9,8 @@ $hero-image-opacity: 0.4;
 .hero {
   position: relative;
   display: grid;
-  place-items: center;
   grid-template-columns: minmax(0, 1fr);
+  place-items: center;
   min-height: 85svh;
   padding: rem(64px) rem($gutter);
   overflow: clip;
